@@ -13,6 +13,9 @@ export const contractor = {
   warranty_text: '5-Year Warranty on All Work',
   license_number: 'TX-12345',
   business_hours: 'Mon–Sat: 7am – 6pm',
+  // Voice AI agent phone number (Retell) — homeowners call this, AI answers
+  voicePhone: '(214) 555-0100',
+  voicePhoneRaw: '2145550100',
 };
 
 const IMG = '/images/concrete';

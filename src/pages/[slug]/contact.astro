@@ -18,6 +18,7 @@ const description = `Get a free concrete estimate in ${contractor.service_areas[
     businessName={contractor.business_name}
     phone={contractor.phone}
     phoneRaw={contractor.phoneRaw}
+    voicePhoneRaw={contractor.voicePhoneRaw}
     activePage="contact"
   />
 
@@ -57,7 +58,7 @@ const description = `Get a free concrete estimate in ${contractor.service_areas[
             </div>
             <div>
               <p class="text-[13px] uppercase tracking-[0.05em] text-[#6B7C8D] font-semibold">Call Us</p>
-              <a href={`tel:${contractor.phoneRaw}`} class="font-heading font-bold text-xl text-[#1E3D5F] hover:text-[#E87C3E] transition-colors">
+              <a href={`tel:${contractor.voicePhoneRaw}`} class="font-heading font-bold text-xl text-[#1E3D5F] hover:text-[#E87C3E] transition-colors">
                 {contractor.phone}
               </a>
             </div>
@@ -125,5 +126,5 @@ const description = `Get a free concrete estimate in ${contractor.service_areas[
     businessHours={contractor.business_hours}
   />
 
-  <MobileCTA phoneRaw={contractor.phoneRaw} contactHref="#contact-form" />
+  <MobileCTA phoneRaw={contractor.voicePhoneRaw} contactHref="#contact-form" />
 </BaseLayout>

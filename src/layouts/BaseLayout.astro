@@ -1,5 +1,7 @@
 ---
 import '../styles/global.css';
+import ChatWidget from '../components/ChatWidget';
+import { contractor } from '../data/demo';
 
 interface Props {
   title: string;
@@ -38,6 +40,9 @@ const { title, description, ogImage, noIndex } = Astro.props;
 </head>
 <body class="min-h-dvh">
   <slot />
+
+  <!-- AI Chat Widget -->
+  <ChatWidget client:idle slug={contractor.slug} businessName={contractor.business_name} />
 
   <!-- Scroll reveal observer -->
   <script>

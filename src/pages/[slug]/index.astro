@@ -17,6 +17,7 @@ const description = `Professional concrete services in ${contractor.service_area
     businessName={contractor.business_name}
     phone={contractor.phone}
     phoneRaw={contractor.phoneRaw}
+    voicePhoneRaw={contractor.voicePhoneRaw}
     activePage="home"
   />
 
@@ -236,7 +237,7 @@ const description = `Professional concrete services in ${contractor.service_area
         <a href={`/${contractor.slug}/contact`} class="bg-[#E87C3E] text-white px-8 py-4 rounded-xl font-bold text-base shadow-lg hover:opacity-90 transition-opacity">
           Get Your Free Estimate
         </a>
-        <a href={`tel:${contractor.phoneRaw}`} class="border border-white/30 text-white px-8 py-4 rounded-xl font-semibold hover:bg-white/10 transition-all">
+        <a href={`tel:${contractor.voicePhoneRaw}`} class="border border-white/30 text-white px-8 py-4 rounded-xl font-semibold hover:bg-white/10 transition-all">
           {contractor.phone}
         </a>
       </div>
@@ -267,7 +268,7 @@ const description = `Professional concrete services in ${contractor.service_area
     businessHours={contractor.business_hours}
   />
 
-  <MobileCTA phoneRaw={contractor.phoneRaw} contactHref={`/${contractor.slug}/contact`} />
+  <MobileCTA phoneRaw={contractor.voicePhoneRaw} contactHref={`/${contractor.slug}/contact`} />
 
   <!-- Counter animation -->
   <script>
