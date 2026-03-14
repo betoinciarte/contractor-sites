@@ -77,10 +77,10 @@ const description = `Professional concrete services in ${contractor.service_area
       <div class="mt-10 scroll-reveal">
         <p class="text-white/30 text-[15px] mb-4">Prefer we call you?</p>
         <div class="glass-card p-5 max-w-sm mx-auto">
-          <form class="flex gap-3" id="quick-form">
+          <form class="flex flex-col sm:flex-row gap-3" id="quick-form">
             <input type="text" name="name" placeholder="Name" required class="flex-1 h-11 px-4 rounded-xl bg-white/10 border border-white/10 text-white text-[15px] placeholder:text-white/30 focus:outline-none focus:ring-2 focus:ring-[#E87C3E]" />
             <input type="tel" name="phone" placeholder="Phone" required class="flex-1 h-11 px-4 rounded-xl bg-white/10 border border-white/10 text-white text-[15px] placeholder:text-white/30 focus:outline-none focus:ring-2 focus:ring-[#E87C3E]" />
-            <button type="submit" class="h-11 px-5 bg-[#E87C3E] text-white rounded-xl font-bold text-[14px] hover:opacity-90 transition-opacity flex-shrink-0">Go</button>
+            <button type="submit" class="h-11 px-5 bg-[#E87C3E] text-white rounded-xl font-bold text-[14px] hover:opacity-90 transition-opacity sm:flex-shrink-0">Go</button>
           </form>
           <p class="text-white/20 text-[12px] mt-2">We call within 30 min. Your info stays private.</p>
         </div>
@@ -107,7 +107,7 @@ const description = `Professional concrete services in ${contractor.service_area
           <img src={beforeAfterPairs[0].after} alt="After" class="absolute inset-0 w-full h-full object-cover ba-after-clip" id="ba-after" />
           <div class="absolute top-6 left-6 bg-black/60 backdrop-blur-sm text-white text-[13px] font-bold uppercase tracking-widest px-4 py-2 rounded-full">Before</div>
           <div class="absolute top-6 right-6 bg-[#E87C3E]/90 backdrop-blur-sm text-white text-[13px] font-bold uppercase tracking-widest px-4 py-2 rounded-full opacity-0 transition-opacity" id="ba-label-after">After</div>
-          <div class="absolute top-0 bottom-0 w-[2px] bg-white/80 shadow-[0_0_12px_rgba(255,255,255,0.4)]" id="ba-divider" style="left: 0%;">
+          <div class="absolute top-0 bottom-0 w-[3px] bg-white/80 shadow-[0_0_12px_rgba(255,255,255,0.4)]" id="ba-divider" style="left: 0%;">
             <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-12 h-12 bg-white rounded-full shadow-xl flex items-center justify-center">
               <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#1E3D5F" stroke-width="2.5"><path d="M18 8L22 12L18 16"/><path d="M6 8L2 12L6 16"/></svg>
             </div>
@@ -260,7 +260,7 @@ const description = `Professional concrete services in ${contractor.service_area
   <!-- ============================================
        7. SERVICES — Grid with transparent pricing
        ============================================ -->
-  <section class="py-20 relative">
+  <section class="py-20 pb-32 md:py-20 relative">
     <div class="absolute inset-0 bg-[#111827]"></div>
     <div class="relative z-10 max-w-5xl mx-auto px-6">
       <div class="text-center mb-12 scroll-reveal">

@@ -143,7 +143,7 @@ export default function ChatWidget({ slug, businessName, apiBase = 'https://app.
 
       {/* Chat panel */}
       {open && (
-        <div className="fixed bottom-20 right-4 md:bottom-6 md:right-6 z-[55] w-[340px] sm:w-[380px] max-h-[480px] bg-white rounded-2xl shadow-2xl flex flex-col overflow-hidden border border-[#E5E0D8]/50 animate-slide-up">
+        <div className="fixed bottom-20 right-4 md:bottom-6 md:right-6 z-[55] w-[calc(100vw-2rem)] sm:w-[380px] max-h-[480px] bg-white rounded-2xl shadow-2xl flex flex-col overflow-hidden border border-[#E5E0D8]/50 animate-slide-up">
           {/* Header */}
           <div className="bg-[#1E3D5F] px-4 py-3 flex items-center justify-between flex-shrink-0">
             <div className="flex items-center gap-3">

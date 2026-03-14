@@ -106,4 +106,10 @@ const base = `/${slug}`;
       document.body.style.overflow = '';
     });
   });
+  mobileMenu?.addEventListener('click', (e) => {
+    if (e.target === mobileMenu) {
+      mobileMenu?.classList.add('hidden');
+      document.body.style.overflow = '';
+    }
+  });
 </script>

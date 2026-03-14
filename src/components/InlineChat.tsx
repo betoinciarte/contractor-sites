@@ -101,7 +101,7 @@ export default function InlineChat({ slug, businessName, apiBase = 'https://app.
                 <button
                   key={prompt}
                   onClick={() => sendMessage(prompt)}
-                  className="px-5 py-3 bg-white/10 hover:bg-white/20 backdrop-blur-sm text-white text-[15px] rounded-xl border border-white/10 transition-all hover:scale-[1.02]"
+                  className="px-4 py-3 bg-white/10 hover:bg-white/20 backdrop-blur-sm text-white text-[14px] rounded-xl border border-white/10 transition-all hover:scale-[1.02]"
                 >
                   {prompt}
                 </button>
@@ -140,12 +140,12 @@ export default function InlineChat({ slug, businessName, apiBase = 'https://app.
           onKeyDown={(e) => e.key === 'Enter' && sendMessage()}
           placeholder="Ask about your project..."
           disabled={streaming}
-          className="flex-1 h-14 px-6 rounded-2xl bg-white/10 backdrop-blur-sm text-white text-[17px] placeholder:text-white/40 border border-white/10 focus:outline-none focus:ring-2 focus:ring-[#E87C3E] focus:border-transparent disabled:opacity-50"
+          className="flex-1 h-12 sm:h-14 px-4 sm:px-6 rounded-2xl bg-white/10 backdrop-blur-sm text-white text-[15px] sm:text-[17px] placeholder:text-white/40 border border-white/10 focus:outline-none focus:ring-2 focus:ring-[#E87C3E] focus:border-transparent disabled:opacity-50"
         />
         <button
           onClick={() => sendMessage()}
           disabled={streaming || !input.trim()}
-          className="w-14 h-14 bg-[#E87C3E] text-white rounded-2xl flex items-center justify-center hover:opacity-90 transition-opacity disabled:opacity-40 flex-shrink-0"
+          className="w-12 h-12 sm:w-14 sm:h-14 bg-[#E87C3E] text-white rounded-2xl flex items-center justify-center hover:opacity-90 transition-opacity disabled:opacity-40 flex-shrink-0"
           aria-label="Send"
         >
           <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>

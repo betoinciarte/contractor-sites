@@ -62,7 +62,7 @@ function SingleSlider({ pair }: { pair: Pair }) {
         <span className="absolute top-4 right-4 bg-black/50 backdrop-blur-sm text-white text-[13px] font-semibold uppercase tracking-wide px-3 py-1 rounded-full">After</span>
 
         {/* Drag handle */}
-        <div className="absolute top-0 bottom-0 w-1 bg-white shadow-[0_0_8px_rgba(0,0,0,0.3)]" style={{ left: `${position}%`, transform: 'translateX(-50%)' }}>
+        <div className="absolute top-0 bottom-0 w-[3px] bg-white shadow-[0_0_8px_rgba(0,0,0,0.3)]" style={{ left: `${position}%`, transform: 'translateX(-50%)' }}>
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-10 h-10 bg-white rounded-full shadow-lg flex items-center justify-center">
             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1E3D5F" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M18 8L22 12L18 16"/><path d="M6 8L2 12L6 16"/></svg>
           </div>
