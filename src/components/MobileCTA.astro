@@ -7,7 +7,7 @@ interface Props {
 const { phoneRaw, contactHref } = Astro.props;
 ---
 
-<div class="fixed bottom-0 left-0 right-0 bg-white border-t border-black/10 shadow-[0_-4px_20px_rgba(0,0,0,0.1)] px-4 py-3 z-50 md:hidden">
+<div class="fixed bottom-0 left-0 right-0 bg-[#111827] border-t border-white/10 shadow-[0_-4px_20px_rgba(0,0,0,0.3)] px-4 py-3 z-50 md:hidden">
   <div class="flex gap-3">
     <a href={`tel:${phoneRaw}`} class="flex-1 h-12 flex items-center justify-center gap-2 bg-[#1E3D5F] text-white rounded-xl font-semibold text-[15px]">
       Call Now
