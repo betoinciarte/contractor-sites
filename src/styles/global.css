@@ -24,7 +24,7 @@
   body {
     font-family: 'DM Sans', sans-serif;
     color: var(--color-body);
-    background: var(--color-bg);
+    background: #0a0e17;
     font-size: 17px;
     line-height: 1.65;
     -webkit-font-smoothing: antialiased;
@@ -38,6 +38,181 @@
   p { max-width: 65ch; }
 }
 
+/* ========================================
+   IMMERSIVE SCROLL EXPERIENCE
+   ======================================== */
+
+/* Scroll-driven entrance: elements animate as they enter viewport */
+.scroll-reveal {
+  opacity: 0;
+  transform: translateY(60px);
+  transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.scroll-reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Stagger children */
+.scroll-stagger > * {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.scroll-stagger.visible > *:nth-child(1) { transition-delay: 0s; opacity: 1; transform: translateY(0); }
+.scroll-stagger.visible > *:nth-child(2) { transition-delay: 0.12s; opacity: 1; transform: translateY(0); }
+.scroll-stagger.visible > *:nth-child(3) { transition-delay: 0.24s; opacity: 1; transform: translateY(0); }
+.scroll-stagger.visible > *:nth-child(4) { transition-delay: 0.36s; opacity: 1; transform: translateY(0); }
+
+/* Word-by-word reveal via CSS clip-path */
+.word-reveal {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+.word-reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Glassmorphism card */
+.glass-card {
+  background: rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 1.5rem;
+}
+
+/* Parallax layer (JS-controlled via --scroll-y) */
+.parallax-slow { transform: translateY(calc(var(--scroll-y, 0) * -0.15px)); }
+.parallax-medium { transform: translateY(calc(var(--scroll-y, 0) * -0.3px)); }
+
+/* Pulsing CTA */
+@keyframes pulse-ring {
+  0% { box-shadow: 0 0 0 0 rgba(232, 124, 62, 0.6); }
+  70% { box-shadow: 0 0 0 20px rgba(232, 124, 62, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(232, 124, 62, 0); }
+}
+.pulse-cta { animation: pulse-ring 2s ease-out infinite; }
+
+/* Gradient text */
+.gradient-text {
+  background: linear-gradient(135deg, #E87C3E 0%, #F59E0B 50%, #E87C3E 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Smooth number counter (JS sets --counter-value) */
+@property --counter-value {
+  syntax: '<integer>';
+  inherits: false;
+  initial-value: 0;
+}
+
+/* ========================================
+   BEFORE/AFTER SCROLL (JS-controlled)
+   ======================================== */
+.ba-container { height: 250vh; }
+.ba-sticky {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+.ba-after-clip {
+  clip-path: inset(0 var(--ba-clip, 100%) 0 0);
+  transition: clip-path 0.05s linear;
+}
+
+/* ========================================
+   PROCESS STICKY SECTION
+   ======================================== */
+.process-scroll { height: 300vh; }
+.process-sticky {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+}
+.process-step-card {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transform: scale(0.95);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+.process-step-card.active {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* ========================================
+   STAT ENTRANCE
+   ======================================== */
+.stat-entrance {
+  opacity: 0;
+  transform: scale(0.7) translateY(30px);
+  transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.stat-entrance.visible {
+  opacity: 1;
+  transform: scale(1) translateY(0);
+}
+
+/* ========================================
+   HERO ANIMATIONS
+   ======================================== */
+@keyframes ken-burns { from { transform: scale(1); } to { transform: scale(1.08); } }
+.hero-bg { animation: ken-burns 25s ease-in-out infinite alternate; }
+
+@keyframes fade-up-in {
+  from { opacity: 0; transform: translateY(40px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.hero-text-1 { animation: fade-up-in 1s ease-out 0.3s both; }
+.hero-text-2 { animation: fade-up-in 1s ease-out 0.6s both; }
+.hero-text-3 { animation: fade-up-in 1s ease-out 0.9s both; }
+.hero-text-4 { animation: fade-up-in 1s ease-out 1.2s both; }
+
+/* Chat widget slide-up */
+@keyframes slide-up {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.animate-slide-up { animation: slide-up 0.3s ease-out; }
+
+/* Scroll progress bar */
+.scroll-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #E87C3E, #F59E0B);
+  z-index: 100;
+  transform-origin: left;
+  transform: scaleX(var(--scroll-progress, 0));
+}
+
+/* Sub-page overrides */
+.page-light { background: var(--color-bg); }
+.page-light body { background: var(--color-bg); }
+
+/* ========================================
+   LEGACY: reveal classes for sub-pages
+   ======================================== */
 .reveal {
   opacity: 0;
   transform: translateY(30px);
@@ -57,13 +232,7 @@
 .reveal-stagger.visible > *:nth-child(5) { transition-delay: 0.6s; opacity: 1; transform: translateY(0); }
 .reveal-stagger.visible > *:nth-child(6) { transition-delay: 0.75s; opacity: 1; transform: translateY(0); }
 
-@keyframes ken-burns { from { transform: scale(1); } to { transform: scale(1.05); } }
-.hero-bg { animation: ken-burns 20s ease-in-out infinite alternate; }
-
-@keyframes bounce-down { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(8px); } }
-.bounce-down { animation: bounce-down 2s ease-in-out infinite; }
-
-/* Process step connectors */
+/* Process step connectors (sub-pages) */
 @media (min-width: 768px) {
   .process-steps { position: relative; }
   .process-step { position: relative; }
@@ -87,14 +256,12 @@
   }
 }
 
-/* Chat widget slide-up */
-@keyframes slide-up {
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-.animate-slide-up { animation: slide-up 0.3s ease-out; }
+@keyframes bounce-down { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(8px); } }
+.bounce-down { animation: bounce-down 2s ease-in-out infinite; }
 
 @media (prefers-reduced-motion: reduce) {
+  .scroll-reveal, .scroll-stagger > *, .word-reveal, .stat-entrance,
   .reveal, .reveal-stagger > * { opacity: 1; transform: none; transition: none; }
   .hero-bg, .bounce-down { animation: none; }
+  .hero-text-1, .hero-text-2, .hero-text-3, .hero-text-4 { animation: none; opacity: 1; transform: none; }
 }

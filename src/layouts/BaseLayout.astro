@@ -8,9 +8,11 @@ interface Props {
   description: string;
   ogImage?: string;
   noIndex?: boolean;
+  dark?: boolean;
+  hideChat?: boolean;
 }
 
-const { title, description, ogImage, noIndex } = Astro.props;
+const { title, description, ogImage, noIndex, dark = false, hideChat = false } = Astro.props;
 ---
 
 <!DOCTYPE html>
@@ -38,11 +40,13 @@ const { title, description, ogImage, noIndex } = Astro.props;
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet" />
 </head>
-<body class="min-h-dvh">
+<body class:list={['min-h-dvh', { 'bg-[#FAFAF8]': !dark }]}>
   <slot />
 
-  <!-- AI Chat Widget -->
-  <ChatWidget client:idle slug={contractor.slug} businessName={contractor.business_name} />
+  {/* Chat bubble only on sub-pages (home has inline chat) */}
+  {!hideChat && (
+    <ChatWidget client:idle slug={contractor.slug} businessName={contractor.business_name} />
+  )}
 
   <!-- Scroll reveal observer -->
   <script>
