@@ -57,18 +57,30 @@ const base = `/${slug}`;
 
   function updateNav() {
     const scrolled = window.scrollY > 80 || !hasHero;
+    const isDarkPage = document.body.classList.contains('dark-page');
     if (scrolled) {
-      nav?.classList.add('bg-white/95', 'shadow-sm', 'backdrop-blur-xl');
-      logo?.classList.add('text-[#1B2B3D]');
-      logo?.classList.remove('text-white');
-      links.forEach(a => { a.classList.add('text-[#3D4F5F]'); a.classList.remove('text-white/80'); });
-      hamburger?.classList.add('text-[#1B2B3D]');
-      hamburger?.classList.remove('text-white');
+      if (isDarkPage) {
+        nav?.classList.add('bg-black/60', 'backdrop-blur-xl');
+        nav?.classList.remove('bg-white/95', 'shadow-sm');
+        logo?.classList.add('text-white');
+        logo?.classList.remove('text-[#1B2B3D]');
+        links.forEach(a => { a.classList.add('text-white/70'); a.classList.remove('text-white/80', 'text-[#3D4F5F]'); });
+        hamburger?.classList.add('text-white');
+        hamburger?.classList.remove('text-[#1B2B3D]');
+      } else {
+        nav?.classList.add('bg-white/95', 'shadow-sm', 'backdrop-blur-xl');
+        nav?.classList.remove('bg-black/60');
+        logo?.classList.add('text-[#1B2B3D]');
+        logo?.classList.remove('text-white');
+        links.forEach(a => { a.classList.add('text-[#3D4F5F]'); a.classList.remove('text-white/80', 'text-white/70'); });
+        hamburger?.classList.add('text-[#1B2B3D]');
+        hamburger?.classList.remove('text-white');
+      }
     } else {
-      nav?.classList.remove('bg-white/95', 'shadow-sm', 'backdrop-blur-xl');
+      nav?.classList.remove('bg-white/95', 'shadow-sm', 'backdrop-blur-xl', 'bg-black/60');
       logo?.classList.add('text-white');
       logo?.classList.remove('text-[#1B2B3D]');
-      links.forEach(a => { a.classList.add('text-white/80'); a.classList.remove('text-[#3D4F5F]'); });
+      links.forEach(a => { a.classList.add('text-white/80'); a.classList.remove('text-[#3D4F5F]', 'text-white/70'); });
       hamburger?.classList.add('text-white');
       hamburger?.classList.remove('text-[#1B2B3D]');
     }

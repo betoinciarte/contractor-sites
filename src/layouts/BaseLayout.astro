@@ -40,7 +40,7 @@ const { title, description, ogImage, noIndex, dark = false, hideChat = false } =
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet" />
 </head>
-<body class:list={['min-h-dvh', { 'bg-[#FAFAF8]': !dark }]}>
+<body class:list={['min-h-dvh', { 'bg-[#FAFAF8]': !dark, 'dark-page': dark }]}>
   <slot />
 
   {/* Chat bubble only on sub-pages (home has inline chat) */}

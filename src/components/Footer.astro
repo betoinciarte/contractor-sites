@@ -4,12 +4,14 @@ interface Props {
   businessName: string;
   phone: string;
   phoneRaw: string;
+  voicePhoneRaw?: string;
   licenseNumber: string;
   serviceAreas: string[];
   businessHours: string;
 }
 
-const { slug, businessName, phone, phoneRaw, licenseNumber, serviceAreas, businessHours } = Astro.props;
+const { slug, businessName, phone, phoneRaw, voicePhoneRaw, licenseNumber, serviceAreas, businessHours } = Astro.props;
+const callNumber = voicePhoneRaw || phoneRaw;
 const base = `/${slug}`;
 ---
 
@@ -19,7 +21,7 @@ const base = `/${slug}`;
       <div>
         <h3 class="font-heading font-bold text-xl text-white mb-2">{businessName}</h3>
         <p class="text-white/50 text-[15px] mb-4">Licensed &amp; Insured &middot; {licenseNumber}</p>
-        <a href={`tel:${phoneRaw}`} class="text-white text-xl font-bold hover:text-[#E87C3E] transition-colors">
+        <a href={`tel:${callNumber}`} class="text-white text-xl font-bold hover:text-[#E87C3E] transition-colors">
           {phone}
         </a>
       </div>
