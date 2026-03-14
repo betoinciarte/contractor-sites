@@ -11,7 +11,6 @@ const description = `Professional concrete services in ${contractor.service_area
 ---
 
 <BaseLayout title={title} description={description} dark hideChat>
-  <!-- Scroll progress bar -->
   <div class="scroll-progress" id="scroll-progress"></div>
 
   <Nav
@@ -24,7 +23,7 @@ const description = `Professional concrete services in ${contractor.service_area
   />
 
   <!-- ============================================
-       ACT 1: THE HOOK — Full immersive hero
+       1. HERO — Emotional hook + 3 clear CTAs
        ============================================ -->
   <section data-hero class="relative min-h-[110vh] flex items-center justify-center overflow-hidden">
     <img src={heroImage} alt="" class="absolute inset-0 w-full h-full object-cover hero-bg" />
@@ -42,11 +41,11 @@ const description = `Professional concrete services in ${contractor.service_area
         We never sell you work you don't need. That's why {stats.rating} out of 5 homeowners rate us on Google.
       </p>
       <div class="flex flex-col sm:flex-row gap-4 justify-center hero-text-4">
-        <a href={`tel:${contractor.voicePhoneRaw}`} class="bg-[#E87C3E] text-white px-10 py-5 rounded-2xl font-bold text-lg shadow-lg shadow-[#E87C3E]/20 hover:shadow-xl hover:shadow-[#E87C3E]/30 hover:scale-[1.03] transition-all pulse-cta">
-          Call Now — AI Answers Instantly
+        <a href="#quoter" class="bg-[#E87C3E] text-white px-10 py-5 rounded-2xl font-bold text-lg shadow-lg shadow-[#E87C3E]/20 hover:shadow-xl hover:shadow-[#E87C3E]/30 hover:scale-[1.03] transition-all pulse-cta">
+          Get Your Estimate Online
         </a>
-        <a href="#transformation" class="border border-white/20 text-white px-10 py-5 rounded-2xl font-semibold text-lg backdrop-blur-sm hover:bg-white/10 transition-all">
-          See Transformations
+        <a href={`tel:${contractor.voicePhoneRaw}`} class="border border-white/20 text-white px-10 py-5 rounded-2xl font-semibold text-lg backdrop-blur-sm hover:bg-white/10 transition-all">
+          Call — AI Picks Up Instantly
         </a>
       </div>
     </div>
@@ -57,12 +56,44 @@ const description = `Professional concrete services in ${contractor.service_area
   </section>
 
   <!-- ============================================
-       ACT 2: THE TRANSFORMATION — Scroll-driven Before/After
+       2. AI QUOTER — Position #2, right after hero
+       ============================================ -->
+  <section id="quoter" class="py-24 relative">
+    <div class="absolute inset-0 bg-gradient-to-b from-[#0a0e17] to-[#0f1623]"></div>
+    <div class="relative z-10 max-w-3xl mx-auto px-6 text-center">
+      <div class="scroll-reveal">
+        <p class="text-[13px] uppercase tracking-[0.15em] text-[#E87C3E] font-semibold mb-3">Online Estimator</p>
+        <h2 class="font-heading font-extrabold text-3xl md:text-5xl text-white mb-3">
+          Get your estimate in 60 seconds.
+        </h2>
+        <p class="text-white/40 text-lg mb-10 mx-auto">
+          Our AI knows concrete pricing in {contractor.service_areas[0]}. Ask about costs, timelines, or anything about your project.
+        </p>
+      </div>
+
+      <InlineChat client:visible slug={contractor.slug} businessName={contractor.business_name} />
+
+      <!-- Quick form alternative -->
+      <div class="mt-10 scroll-reveal">
+        <p class="text-white/30 text-[15px] mb-4">Prefer we call you?</p>
+        <div class="glass-card p-5 max-w-sm mx-auto">
+          <form class="flex gap-3" id="quick-form">
+            <input type="text" name="name" placeholder="Name" required class="flex-1 h-11 px-4 rounded-xl bg-white/10 border border-white/10 text-white text-[15px] placeholder:text-white/30 focus:outline-none focus:ring-2 focus:ring-[#E87C3E]" />
+            <input type="tel" name="phone" placeholder="Phone" required class="flex-1 h-11 px-4 rounded-xl bg-white/10 border border-white/10 text-white text-[15px] placeholder:text-white/30 focus:outline-none focus:ring-2 focus:ring-[#E87C3E]" />
+            <button type="submit" class="h-11 px-5 bg-[#E87C3E] text-white rounded-xl font-bold text-[14px] hover:opacity-90 transition-opacity flex-shrink-0">Go</button>
+          </form>
+          <p class="text-white/20 text-[12px] mt-2">We call within 30 min. Your info stays private.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================
+       3. BEFORE/AFTER — Scroll-driven transformation
        ============================================ -->
   <section id="transformation" class="ba-container">
     <div class="ba-sticky" id="ba-section">
       <div class="absolute inset-0 bg-[#0a0e17]"></div>
-
       <div class="relative z-10 w-full max-w-5xl mx-auto px-6">
         <div class="text-center mb-8">
           <p class="text-[13px] uppercase tracking-[0.15em] text-[#E87C3E] font-semibold mb-3 scroll-reveal">Real Results</p>
@@ -71,59 +102,87 @@ const description = `Professional concrete services in ${contractor.service_area
           </h2>
           <p class="text-white/40 text-[15px] mt-3 scroll-reveal">Scroll to reveal the after</p>
         </div>
-
         <div class="relative aspect-[16/9] rounded-3xl overflow-hidden shadow-2xl shadow-black/50">
-          <!-- Before (base layer) -->
           <img src={beforeAfterPairs[0].before} alt="Before" class="absolute inset-0 w-full h-full object-cover" id="ba-before" />
-          <!-- After (clipped layer) -->
           <img src={beforeAfterPairs[0].after} alt="After" class="absolute inset-0 w-full h-full object-cover ba-after-clip" id="ba-after" />
-
-          <!-- Labels -->
-          <div class="absolute top-6 left-6 bg-black/60 backdrop-blur-sm text-white text-[13px] font-bold uppercase tracking-widest px-4 py-2 rounded-full" id="ba-label-before">Before</div>
+          <div class="absolute top-6 left-6 bg-black/60 backdrop-blur-sm text-white text-[13px] font-bold uppercase tracking-widest px-4 py-2 rounded-full">Before</div>
           <div class="absolute top-6 right-6 bg-[#E87C3E]/90 backdrop-blur-sm text-white text-[13px] font-bold uppercase tracking-widest px-4 py-2 rounded-full opacity-0 transition-opacity" id="ba-label-after">After</div>
-
-          <!-- Divider line -->
           <div class="absolute top-0 bottom-0 w-[2px] bg-white/80 shadow-[0_0_12px_rgba(255,255,255,0.4)]" id="ba-divider" style="left: 0%;">
             <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-12 h-12 bg-white rounded-full shadow-xl flex items-center justify-center">
               <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#1E3D5F" stroke-width="2.5"><path d="M18 8L22 12L18 16"/><path d="M6 8L2 12L6 16"/></svg>
             </div>
           </div>
         </div>
-
-        <p class="text-center text-white/30 text-[15px] mt-4">
-          {beforeAfterPairs[0].title} &middot; {beforeAfterPairs[0].location}
-        </p>
+        <p class="text-center text-white/30 text-[15px] mt-4">{beforeAfterPairs[0].title} &middot; {beforeAfterPairs[0].location}</p>
       </div>
     </div>
   </section>
 
   <!-- ============================================
-       ACT 3: THE PROCESS — Sticky section with step transitions
+       4. FEAR DEFUSERS — Data-driven trust builders
+       ============================================ -->
+  <section class="py-24 relative">
+    <div class="absolute inset-0 bg-[#0a0e17]"></div>
+    <div class="relative z-10 max-w-5xl mx-auto px-6">
+      <div class="text-center mb-14 scroll-reveal">
+        <p class="text-[13px] uppercase tracking-[0.15em] text-[#E87C3E] font-semibold mb-3">Based on 750+ Reviews</p>
+        <h2 class="font-heading font-extrabold text-3xl md:text-4xl text-white">
+          We already know your concerns.
+        </h2>
+      </div>
+
+      <div class="grid sm:grid-cols-2 gap-6 scroll-stagger">
+        <!-- Fear 1: Upselling -->
+        <div class="glass-card p-8 group hover:bg-white/10 transition-colors">
+          <p class="text-white/30 text-[13px] uppercase tracking-wider mb-3">"What if they upsell me?"</p>
+          <h3 class="font-heading font-bold text-xl text-white mb-2">We tell you what you DON'T need.</h3>
+          <p class="text-white/50 text-[15px] leading-relaxed">9.5% of our reviews explicitly mention our honesty as the #1 reason they chose us. We've told homeowners they don't need foundation repair — and saved them thousands.</p>
+        </div>
+
+        <!-- Fear 2: Hidden costs -->
+        <div class="glass-card p-8 group hover:bg-white/10 transition-colors">
+          <p class="text-white/30 text-[13px] uppercase tracking-wider mb-3">"What about hidden costs?"</p>
+          <h3 class="font-heading font-bold text-xl text-white mb-2">Our quote is the price. Period.</h3>
+          <p class="text-white/50 text-[15px] leading-relaxed">If something unexpected comes up during the job, we discuss it with you before doing anything extra. No surprises, no escalation. 8.3% of negative contractor reviews mention this — we won't be one of them.</p>
+        </div>
+
+        <!-- Fear 3: Warranty -->
+        <div class="glass-card p-8 group hover:bg-white/10 transition-colors">
+          <p class="text-white/30 text-[13px] uppercase tracking-wider mb-3">"Will the warranty actually work?"</p>
+          <h3 class="font-heading font-bold text-xl text-white mb-2">No fine print. We've honored every claim.</h3>
+          <p class="text-white/50 text-[15px] leading-relaxed">37% of negative contractor reviews are about warranty issues. Our warranty is straightforward and transferable — if you sell your home, the warranty goes with it.</p>
+        </div>
+
+        <!-- Fear 4: Mess -->
+        <div class="glass-card p-8 group hover:bg-white/10 transition-colors">
+          <p class="text-white/30 text-[13px] uppercase tracking-wider mb-3">"Will they leave a mess?"</p>
+          <h3 class="font-heading font-bold text-xl text-white mb-2">Left cleaner than we found it.</h3>
+          <p class="text-white/50 text-[15px] leading-relaxed">21.4% of our reviews specifically praise our cleanup — that's not normal for concrete contractors. We protect your landscaping, document everything, and clean up daily.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================
+       5. PROCESS — 3 steps sticky
        ============================================ -->
   <section class="process-scroll" id="process-section">
     <div class="process-sticky">
       <div class="absolute inset-0 bg-gradient-to-b from-[#0a0e17] to-[#0f1623]"></div>
-
       <div class="relative z-10 w-full max-w-6xl mx-auto px-6">
         <div class="text-center mb-6">
           <p class="text-[13px] uppercase tracking-[0.15em] text-[#E87C3E] font-semibold mb-3">Our Process</p>
-          <h2 class="font-heading font-extrabold text-3xl md:text-5xl text-white">
-            From call to <span class="gradient-text">done.</span>
-          </h2>
+          <h2 class="font-heading font-extrabold text-3xl md:text-5xl text-white">From call to <span class="gradient-text">done.</span></h2>
         </div>
-
-        <!-- Step indicators -->
         <div class="flex justify-center gap-3 mb-10" id="step-dots">
           <div class="step-dot w-3 h-3 rounded-full bg-[#E87C3E] transition-all"></div>
           <div class="step-dot w-3 h-3 rounded-full bg-white/20 transition-all"></div>
           <div class="step-dot w-3 h-3 rounded-full bg-white/20 transition-all"></div>
         </div>
-
-        <!-- Steps (stacked, JS controls visibility) -->
         <div class="relative h-[50vh]" id="process-cards">
           {[
-            { num: '01', title: 'You Call. AI Answers.', desc: 'Our AI assistant picks up instantly — no voicemail, no waiting. It understands concrete, asks the right questions, and schedules your free estimate.', image: processImages[0] },
-            { num: '02', title: 'We Pour. You Watch.', desc: 'Our crew arrives on schedule. Proper grading, reinforced base, precision pour. We send daily photo updates so you always know the status.', image: processImages[1] },
+            { num: '01', title: 'You Call. AI Answers.', desc: 'Our AI picks up instantly — no voicemail, no waiting. It understands concrete, asks the right questions, and schedules your free on-site estimate.', image: processImages[0] },
+            { num: '02', title: 'We Pour. You Watch.', desc: 'Our crew arrives on schedule. Proper grading, reinforced base, precision pour. Daily photo updates so you always know the status.', image: processImages[1] },
             { num: '03', title: 'Spotless. Guaranteed.', desc: "Walk-through inspection, professional cleanup, warranty documentation. 21.4% of our reviews specifically mention how clean we leave it.", image: processImages[2] },
           ].map((step, i) => (
             <div class={`process-step-card ${i === 0 ? 'active' : ''}`} data-step={i}>
@@ -147,19 +206,17 @@ const description = `Professional concrete services in ${contractor.service_area
   </section>
 
   <!-- ============================================
-       ACT 4: THE PROOF — Stats + Reviews
+       6. SOCIAL PROOF — Stats + Real reviews
        ============================================ -->
   <section class="py-28 relative overflow-hidden">
     <div class="absolute inset-0 bg-[#0a0e17]"></div>
-
     <div class="relative z-10 max-w-5xl mx-auto px-6">
-      <!-- Stats -->
       <div class="grid grid-cols-2 md:grid-cols-4 gap-6 mb-20 scroll-stagger" id="stats-section">
         {[
-          { target: stats.years, suffix: '+', label: 'Years' },
-          { target: stats.projects, suffix: '+', label: 'Projects' },
+          { target: 52, suffix: '%', label: 'Recommend Us' },
+          { target: 42, suffix: '%', label: 'Name Our Crew' },
+          { target: 21, suffix: '%', label: 'Praise Cleanup' },
           { target: stats.rating, suffix: '★', label: 'Google Rating', decimal: true },
-          { target: 52, suffix: '%', label: 'Recommend to Friends' },
         ].map((stat) => (
           <div class="glass-card p-6 md:p-8 text-center stat-entrance">
             <div class="font-heading font-extrabold text-4xl md:text-5xl text-white mb-1"
@@ -173,23 +230,22 @@ const description = `Professional concrete services in ${contractor.service_area
         ))}
       </div>
 
-      <!-- Reviews -->
       <div class="text-center mb-12 scroll-reveal">
-        <p class="text-[13px] uppercase tracking-[0.15em] text-[#E87C3E] font-semibold mb-3">Real Reviews</p>
-        <h2 class="font-heading font-extrabold text-3xl md:text-4xl text-white">
-          Don't take our word for it.
-        </h2>
+        <p class="text-[13px] uppercase tracking-[0.15em] text-[#E87C3E] font-semibold mb-3">Real Words, Real Homeowners</p>
+        <h2 class="font-heading font-extrabold text-3xl md:text-4xl text-white">Don't take our word for it.</h2>
       </div>
 
       <div class="grid md:grid-cols-3 gap-6 scroll-stagger">
-        {reviews.map((review) => (
+        {[
+          { text: "They were honest and told me I didn't need foundation repair — saved us thousands. You don't find that kind of honesty anymore.", name: "Maria G.", location: "Dallas, TX", service: "Foundation Inspection" },
+          { text: "You could not tell any work had been done — left it spotless. The crew was friendly, on time, and professional every single day.", name: "James T.", location: "Fort Worth, TX", service: "Driveway" },
+          { text: "Cracks started closing — I walked around pointing at walls in disbelief. My house feels solid again. Peace of mind you can't put a price on.", name: "David R.", location: "Plano, TX", service: "Foundation Repair" },
+        ].map((review) => (
           <div class="glass-card p-8 relative group hover:bg-white/10 transition-colors">
             <div class="absolute top-4 right-6 text-[#E87C3E]/30 text-5xl font-serif leading-none">&ldquo;</div>
             <p class="text-white/80 text-[17px] italic leading-relaxed mb-5">&ldquo;{review.text}&rdquo;</p>
             <div class="flex items-center gap-3">
-              <div class="w-10 h-10 rounded-full bg-[#E87C3E]/20 flex items-center justify-center text-[#E87C3E] font-bold text-[15px]">
-                {review.name.charAt(0)}
-              </div>
+              <div class="w-10 h-10 rounded-full bg-[#E87C3E]/20 flex items-center justify-center text-[#E87C3E] font-bold text-[15px]">{review.name.charAt(0)}</div>
               <div>
                 <p class="text-white text-[15px] font-semibold">{review.name}</p>
                 <p class="text-white/40 text-[13px]">{review.location} &middot; {review.service}</p>
@@ -198,62 +254,12 @@ const description = `Professional concrete services in ${contractor.service_area
           </div>
         ))}
       </div>
-
-      {contractor.google_reviews_link && (
-        <div class="text-center mt-10 scroll-reveal">
-          <a href={contractor.google_reviews_link} target="_blank" rel="noopener" class="inline-flex items-center gap-2 text-white/50 hover:text-white text-[15px] transition-colors">
-            <span class="text-[#F59E0B]">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
-            {stats.rating} on Google &middot; See all reviews &rarr;
-          </a>
-        </div>
-      )}
     </div>
   </section>
 
   <!-- ============================================
-       ACT 5: THE ACTION — Inline Chat + Call CTA
+       7. SERVICES — Grid with transparent pricing
        ============================================ -->
-  <section class="py-28 relative" id="talk-to-us">
-    <div class="absolute inset-0 bg-gradient-to-b from-[#0a0e17] to-[#111827]"></div>
-
-    <div class="relative z-10 max-w-3xl mx-auto px-6 text-center">
-      <div class="scroll-reveal">
-        <p class="text-[13px] uppercase tracking-[0.15em] text-[#E87C3E] font-semibold mb-3">Talk To Us Now</p>
-        <h2 class="font-heading font-extrabold text-3xl md:text-5xl text-white mb-3">
-          Ask us anything.
-        </h2>
-        <p class="text-white/40 text-lg mb-10 mx-auto">
-          Our AI assistant knows concrete. Get instant answers about your project — pricing, timeline, process.
-        </p>
-      </div>
-
-      <InlineChat client:visible slug={contractor.slug} businessName={contractor.business_name} />
-
-      <!-- Quick form for those who don't want chat or call -->
-      <div class="mt-12 scroll-reveal">
-        <div class="glass-card p-6 max-w-md mx-auto">
-          <p class="text-white/60 text-[15px] mb-4 text-center">Or leave your info — we call you within 30 min.</p>
-          <form class="space-y-3" id="quick-form">
-            <input type="text" name="name" placeholder="Your Name" required class="w-full h-11 px-4 rounded-xl bg-white/10 border border-white/10 text-white text-[15px] placeholder:text-white/30 focus:outline-none focus:ring-2 focus:ring-[#E87C3E]" />
-            <input type="tel" name="phone" placeholder="Phone Number" required class="w-full h-11 px-4 rounded-xl bg-white/10 border border-white/10 text-white text-[15px] placeholder:text-white/30 focus:outline-none focus:ring-2 focus:ring-[#E87C3E]" />
-            <button type="submit" class="w-full h-11 bg-[#E87C3E] text-white rounded-xl font-bold text-[15px] hover:opacity-90 transition-opacity">Get My Free Estimate</button>
-          </form>
-          <p class="text-white/20 text-[12px] text-center mt-2">Your info is private and never shared.</p>
-        </div>
-      </div>
-
-      <div class="mt-12 scroll-reveal">
-        <p class="text-white/30 text-[15px] mb-6">Prefer to talk?</p>
-        <a href={`tel:${contractor.voicePhoneRaw}`} class="inline-flex items-center gap-4 bg-[#E87C3E] text-white px-10 py-5 rounded-2xl font-bold text-lg shadow-lg shadow-[#E87C3E]/20 hover:shadow-xl hover:scale-[1.03] transition-all pulse-cta">
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
-          Call {contractor.phone}
-        </a>
-        <p class="text-white/20 text-[13px] mt-3">AI answers instantly &middot; No voicemail &middot; 24/7</p>
-      </div>
-    </div>
-  </section>
-
-  <!-- Services preview -->
   <section class="py-20 relative">
     <div class="absolute inset-0 bg-[#111827]"></div>
     <div class="relative z-10 max-w-5xl mx-auto px-6">
@@ -273,10 +279,50 @@ const description = `Professional concrete services in ${contractor.service_area
           </a>
         ))}
       </div>
-      <div class="text-center mt-8 scroll-reveal">
-        <a href={`/${contractor.slug}/services`} class="text-white/50 hover:text-white text-[15px] transition-colors">
-          View all services &amp; pricing &rarr;
+    </div>
+  </section>
+
+  <!-- ============================================
+       8. FINAL CTA — 3 clear options
+       ============================================ -->
+  <section class="py-28 relative">
+    <div class="absolute inset-0 bg-gradient-to-b from-[#111827] to-[#0a0e17]"></div>
+    <div class="relative z-10 max-w-4xl mx-auto px-6 text-center">
+      <div class="scroll-reveal">
+        <h2 class="font-heading font-extrabold text-3xl md:text-5xl text-white mb-4">Ready to start?</h2>
+        <p class="text-white/40 text-lg mb-12">Choose how you want to get your free estimate.</p>
+      </div>
+
+      <div class="grid sm:grid-cols-3 gap-6 scroll-stagger">
+        <!-- Option A: Online Estimate -->
+        <a href="#quoter" class="glass-card p-8 text-center hover:bg-white/10 transition-all group">
+          <div class="w-14 h-14 rounded-2xl bg-[#E87C3E]/20 flex items-center justify-center mx-auto mb-4 group-hover:bg-[#E87C3E]/30 transition-colors">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#E87C3E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+          </div>
+          <h3 class="font-heading font-bold text-white text-lg mb-2">Get Estimate Online</h3>
+          <p class="text-white/40 text-[14px]">AI-powered. Instant ballpark pricing.</p>
         </a>
+
+        <!-- Option B: Call -->
+        <a href={`tel:${contractor.voicePhoneRaw}`} class="glass-card p-8 text-center hover:bg-white/10 transition-all group">
+          <div class="w-14 h-14 rounded-2xl bg-[#E87C3E]/20 flex items-center justify-center mx-auto mb-4 group-hover:bg-[#E87C3E]/30 transition-colors">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#E87C3E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+          </div>
+          <h3 class="font-heading font-bold text-white text-lg mb-2">Call Us</h3>
+          <p class="text-white/40 text-[14px]">AI answers instantly. No voicemail.</p>
+        </a>
+
+        <!-- Option C: We call you -->
+        <div class="glass-card p-8 text-center">
+          <div class="w-14 h-14 rounded-2xl bg-[#E87C3E]/20 flex items-center justify-center mx-auto mb-4">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#E87C3E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          </div>
+          <h3 class="font-heading font-bold text-white text-lg mb-3">We Call You</h3>
+          <form class="space-y-2" id="callback-form">
+            <input type="tel" name="phone" placeholder="Your phone" required class="w-full h-10 px-3 rounded-lg bg-white/10 border border-white/10 text-white text-[14px] placeholder:text-white/30 focus:outline-none focus:ring-2 focus:ring-[#E87C3E]" />
+            <button type="submit" class="w-full h-10 bg-[#E87C3E] text-white rounded-lg font-bold text-[14px] hover:opacity-90 transition-opacity">Call Me</button>
+          </form>
+        </div>
       </div>
     </div>
   </section>
@@ -292,132 +338,104 @@ const description = `Professional concrete services in ${contractor.service_area
     businessHours={contractor.business_hours}
   />
 
-  <MobileCTA phoneRaw={contractor.voicePhoneRaw} contactHref="#talk-to-us" />
+  <MobileCTA phoneRaw={contractor.voicePhoneRaw} contactHref="#quoter" />
 
-  <!-- ============================================
-       SCROLL ENGINE — Controls all scroll-driven effects
-       ============================================ -->
+  <!-- SCROLL ENGINE -->
   <script>
-    // Scroll progress bar
     const progressBar = document.getElementById('scroll-progress');
-
-    // Before/After scroll-driven
     const baContainer = document.querySelector('.ba-container') as HTMLElement;
     const baAfter = document.getElementById('ba-after') as HTMLElement;
     const baDivider = document.getElementById('ba-divider') as HTMLElement;
     const baLabelAfter = document.getElementById('ba-label-after') as HTMLElement;
-
-    // Process sticky steps
     const processSection = document.getElementById('process-section') as HTMLElement;
     const processCards = document.querySelectorAll('.process-step-card');
     const stepDots = document.querySelectorAll('.step-dot');
 
-    // Scroll handler
     function onScroll() {
       const scrollY = window.scrollY;
       const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+      if (progressBar) progressBar.style.setProperty('--scroll-progress', String(scrollY / maxScroll));
 
-      // Progress bar
-      if (progressBar) {
-        progressBar.style.setProperty('--scroll-progress', String(scrollY / maxScroll));
-      }
-
-      // Before/After
       if (baContainer && baAfter && baDivider) {
         const rect = baContainer.getBoundingClientRect();
-        const containerTop = -rect.top;
-        const scrollRange = baContainer.offsetHeight - window.innerHeight;
-        const progress = Math.max(0, Math.min(1, containerTop / scrollRange));
-
+        const progress = Math.max(0, Math.min(1, -rect.top / (baContainer.offsetHeight - window.innerHeight)));
         baAfter.style.setProperty('--ba-clip', `${(1 - progress) * 100}%`);
         baDivider.style.left = `${progress * 100}%`;
-        if (baLabelAfter) {
-          baLabelAfter.style.opacity = progress > 0.3 ? '1' : '0';
-        }
+        if (baLabelAfter) baLabelAfter.style.opacity = progress > 0.3 ? '1' : '0';
       }
 
-      // Process steps
       if (processSection) {
         const rect = processSection.getBoundingClientRect();
-        const containerTop = -rect.top;
-        const scrollRange = processSection.offsetHeight - window.innerHeight;
-        const progress = Math.max(0, Math.min(1, containerTop / scrollRange));
-
+        const progress = Math.max(0, Math.min(1, -rect.top / (processSection.offsetHeight - window.innerHeight)));
         const stepIndex = Math.min(2, Math.floor(progress * 3));
-        processCards.forEach((card, i) => {
-          card.classList.toggle('active', i === stepIndex);
-        });
+        processCards.forEach((card, i) => card.classList.toggle('active', i === stepIndex));
         stepDots.forEach((dot, i) => {
           (dot as HTMLElement).style.background = i === stepIndex ? '#E87C3E' : 'rgba(255,255,255,0.2)';
           (dot as HTMLElement).style.width = i === stepIndex ? '2rem' : '0.75rem';
         });
       }
     }
-
     window.addEventListener('scroll', onScroll, { passive: true });
     onScroll();
 
-    // Intersection Observer for reveal animations
+    // Reveal animations
     const revealObserver = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('visible');
-        }
-      });
+      entries.forEach((entry) => { if (entry.isIntersecting) entry.target.classList.add('visible'); });
     }, { threshold: 0.15 });
+    document.querySelectorAll('.scroll-reveal, .scroll-stagger, .stat-entrance').forEach(el => revealObserver.observe(el));
 
-    document.querySelectorAll('.scroll-reveal, .scroll-stagger, .stat-entrance, .reveal, .reveal-stagger').forEach(el => {
-      revealObserver.observe(el);
-    });
-
-    // Counter animation for stats
+    // Counter animation
     const statsSection = document.getElementById('stats-section');
     if (statsSection) {
-      let statsDone = false;
-      const statsObs = new IntersectionObserver((entries) => {
-        if (entries[0].isIntersecting && !statsDone) {
-          statsDone = true;
+      let done = false;
+      const obs = new IntersectionObserver((entries) => {
+        if (entries[0].isIntersecting && !done) {
+          done = true;
           statsSection.querySelectorAll('[data-count-target]').forEach(el => {
             const target = parseFloat(el.getAttribute('data-count-target')!);
             const suffix = el.getAttribute('data-count-suffix') || '';
             const isDecimal = el.getAttribute('data-count-decimal') === 'true';
             const end = isDecimal ? target * 10 : target;
-            const startTime = performance.now();
+            const start = performance.now();
             function tick(now: number) {
-              const p = Math.min((now - startTime) / 1500, 1);
-              const eased = 1 - Math.pow(1 - p, 3);
-              const val = Math.round(eased * end);
-              el.textContent = isDecimal ? `${suffix}${(val / 10).toFixed(1)}` : `${val}${suffix}`;
+              const p = Math.min((now - start) / 1500, 1);
+              const v = Math.round((1 - Math.pow(1 - p, 3)) * end);
+              el.textContent = isDecimal ? `${suffix}${(v / 10).toFixed(1)}` : `${v}${suffix}`;
               if (p < 1) requestAnimationFrame(tick);
             }
             requestAnimationFrame(tick);
           });
         }
       }, { threshold: 0.3 });
-      statsObs.observe(statsSection);
+      obs.observe(statsSection);
     }
 
-    // Quick form submission
-    const quickForm = document.getElementById('quick-form') as HTMLFormElement;
-    quickForm?.addEventListener('submit', async (e) => {
+    // Quick form
+    document.getElementById('quick-form')?.addEventListener('submit', async (e) => {
       e.preventDefault();
-      const data = Object.fromEntries(new FormData(quickForm));
-      const btn = quickForm.querySelector('button') as HTMLButtonElement;
-      btn.textContent = 'Sending...';
-      btn.disabled = true;
+      const form = e.target as HTMLFormElement;
+      const data = Object.fromEntries(new FormData(form));
       try {
-        const res = await fetch('/api/contractor-site/rodriguez-concrete/lead', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+        await fetch('/api/contractor-site/rodriguez-concrete/lead', {
+          method: 'POST', headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ ...data, consent: true }),
         });
-        if (res.ok) {
-          quickForm.innerHTML = '<p class="text-[#16A34A] text-center py-4 font-semibold">Thanks! We\'ll call you within 30 minutes.</p>';
-        } else { throw new Error(); }
-      } catch {
-        btn.textContent = 'Get My Free Estimate';
-        btn.disabled = false;
-      }
+        form.innerHTML = '<p class="text-[#16A34A] text-center py-2 font-semibold text-[14px]">We\'ll call you within 30 min!</p>';
+      } catch {}
+    });
+
+    // Callback form
+    document.getElementById('callback-form')?.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const form = e.target as HTMLFormElement;
+      const data = Object.fromEntries(new FormData(form));
+      try {
+        await fetch('/api/contractor-site/rodriguez-concrete/lead', {
+          method: 'POST', headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ ...data, consent: true }),
+        });
+        form.innerHTML = '<p class="text-[#16A34A] text-center py-2 font-semibold text-[14px]">Calling you soon!</p>';
+      } catch {}
     });
   </script>
 </BaseLayout>

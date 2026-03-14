@@ -81,9 +81,9 @@ export default function InlineChat({ slug, businessName, apiBase = 'https://app.
   }, [input, streaming, messages, slug, sessionId, apiBase, started]);
 
   const quickPrompts = [
-    "I need a new driveway",
-    "How much does a patio cost?",
-    "My foundation has cracks",
+    "How much for a 20×40 driveway?",
+    "Foundation repair cost?",
+    "Stamped patio estimate?",
   ];
 
   return (
