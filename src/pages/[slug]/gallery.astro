@@ -1,0 +1,67 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Nav from '../../components/Nav.astro';
+import Footer from '../../components/Footer.astro';
+import MobileCTA from '../../components/MobileCTA.astro';
+import GalleryGrid from '../../components/GalleryGrid';
+import { contractor, galleryProjects } from '../../data/demo';
+
+const title = `Our Work — ${contractor.business_name}`;
+const description = `Browse our portfolio of concrete projects in ${contractor.service_areas.slice(0,3).join(', ')}. Driveways, patios, foundations, and more.`;
+---
+
+<BaseLayout title={title} description={description}>
+  <Nav
+    slug={contractor.slug}
+    businessName={contractor.business_name}
+    phone={contractor.phone}
+    phoneRaw={contractor.phoneRaw}
+    activePage="gallery"
+  />
+
+  <!-- Page Header -->
+  <section class="pt-32 pb-16 bg-[#F7F5F0]">
+    <div class="max-w-[1200px] mx-auto px-6 text-center">
+      <p class="text-[13px] uppercase tracking-[0.05em] text-[#E87C3E] font-semibold mb-3">Portfolio</p>
+      <h1 class="font-heading font-extrabold text-4xl md:text-[48px] leading-[1.1] text-[#1B2B3D] mb-4">Our Work</h1>
+      <p class="text-[#6B7C8D] text-lg max-w-xl mx-auto">
+        {contractor.years_in_business}+ years of quality work across the {contractor.service_areas[0]} metro area. Every project backed by our warranty.
+      </p>
+    </div>
+  </section>
+
+  <!-- Gallery Grid -->
+  <section class="py-20">
+    <div class="max-w-[1200px] mx-auto px-6">
+      <GalleryGrid client:load projects={galleryProjects} />
+    </div>
+  </section>
+
+  <!-- CTA Banner -->
+  <section class="bg-[#1E3D5F] py-16">
+    <div class="max-w-[800px] mx-auto px-6 text-center">
+      <h2 class="font-heading font-bold text-3xl md:text-[36px] text-white mb-3">Like What You See?</h2>
+      <p class="text-white/70 text-lg mb-8">Let's discuss your project. Free estimates, no obligation.</p>
+      <div class="flex flex-col sm:flex-row gap-3 justify-center">
+        <a href={`/${contractor.slug}/contact`} class="bg-[#E87C3E] text-white px-8 py-4 rounded-xl font-bold text-base shadow-lg hover:opacity-90 transition-opacity">
+          Get Free Estimate
+        </a>
+        <a href={`tel:${contractor.phoneRaw}`} class="border border-white/30 text-white px-8 py-4 rounded-xl font-semibold hover:bg-white/10 transition-all">
+          {contractor.phone}
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <Footer
+    slug={contractor.slug}
+    businessName={contractor.business_name}
+    phone={contractor.phone}
+    phoneRaw={contractor.phoneRaw}
+    licenseNumber={contractor.license_number}
+    serviceAreas={contractor.service_areas}
+    businessHours={contractor.business_hours}
+  />
+
+  <MobileCTA phoneRaw={contractor.phoneRaw} contactHref={`/${contractor.slug}/contact`} />
+</BaseLayout>

@@ -1,0 +1,95 @@
+---
+interface Props {
+  slug: string;
+  businessName: string;
+  phone: string;
+  phoneRaw: string;
+  activePage?: 'home' | 'services' | 'gallery' | 'contact';
+}
+
+const { slug, businessName, phone, phoneRaw, activePage = 'home' } = Astro.props;
+const base = `/${slug}`;
+---
+
+<nav class="fixed top-0 left-0 right-0 z-50 transition-all duration-300" id="main-nav">
+  <div class="max-w-[1200px] mx-auto px-6 h-20 flex items-center justify-between">
+    <a href={base} class="font-heading font-bold text-xl transition-colors" id="nav-logo">{businessName}</a>
+    <div class="hidden md:flex items-center gap-6">
+      <a href={`${base}/services`} class={`nav-link text-[15px] transition-colors ${activePage === 'services' ? 'font-semibold' : ''}`}>Services</a>
+      <a href={`${base}/gallery`} class={`nav-link text-[15px] transition-colors ${activePage === 'gallery' ? 'font-semibold' : ''}`}>Our Work</a>
+      <a href={activePage === 'home' ? '#reviews' : `${base}#reviews`} class="nav-link text-[15px] transition-colors">Reviews</a>
+      <a href={`tel:${phoneRaw}`} class="nav-link text-[15px] transition-colors">{phone}</a>
+      <a href={`${base}/contact`} class="bg-[#E87C3E] text-white px-5 py-2.5 rounded-xl text-[15px] font-semibold hover:opacity-90 transition-opacity">Free Estimate</a>
+    </div>
+    <div class="flex items-center gap-3 md:hidden">
+      <a href={`tel:${phoneRaw}`} class="bg-[#E87C3E] text-white p-2.5 rounded-xl">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+      </a>
+      <button id="hamburger-btn" class="p-2" aria-label="Open menu">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<!-- Mobile fullscreen overlay -->
+<div id="mobile-menu" class="fixed inset-0 bg-[#111827]/95 backdrop-blur-xl z-[60] flex flex-col items-center justify-center gap-8 hidden">
+  <button id="close-menu" class="absolute top-6 right-6 text-white p-2" aria-label="Close menu">
+    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+  </button>
+  <a href={base} class="text-white text-2xl font-heading font-bold hover:text-[#E87C3E] transition-colors">Home</a>
+  <a href={`${base}/services`} class="text-white text-2xl font-heading font-bold hover:text-[#E87C3E] transition-colors">Services</a>
+  <a href={`${base}/gallery`} class="text-white text-2xl font-heading font-bold hover:text-[#E87C3E] transition-colors">Our Work</a>
+  <a href={activePage === 'home' ? '#reviews' : `${base}#reviews`} class="text-white text-2xl font-heading font-bold hover:text-[#E87C3E] transition-colors">Reviews</a>
+  <a href={`${base}/contact`} class="text-white text-2xl font-heading font-bold hover:text-[#E87C3E] transition-colors">Contact</a>
+  <a href={`tel:${phoneRaw}`} class="text-[#E87C3E] text-2xl font-heading font-bold">{phone}</a>
+</div>
+
+<script>
+  const nav = document.getElementById('main-nav');
+  const logo = document.getElementById('nav-logo');
+  const links = document.querySelectorAll('.nav-link');
+  const hamburger = document.getElementById('hamburger-btn');
+
+  const hasHero = document.querySelector('[data-hero]') !== null;
+
+  function updateNav() {
+    const scrolled = window.scrollY > 80 || !hasHero;
+    if (scrolled) {
+      nav?.classList.add('bg-white/95', 'shadow-sm', 'backdrop-blur-xl');
+      logo?.classList.add('text-[#1B2B3D]');
+      logo?.classList.remove('text-white');
+      links.forEach(a => { a.classList.add('text-[#3D4F5F]'); a.classList.remove('text-white/80'); });
+      hamburger?.classList.add('text-[#1B2B3D]');
+      hamburger?.classList.remove('text-white');
+    } else {
+      nav?.classList.remove('bg-white/95', 'shadow-sm', 'backdrop-blur-xl');
+      logo?.classList.add('text-white');
+      logo?.classList.remove('text-[#1B2B3D]');
+      links.forEach(a => { a.classList.add('text-white/80'); a.classList.remove('text-[#3D4F5F]'); });
+      hamburger?.classList.add('text-white');
+      hamburger?.classList.remove('text-[#1B2B3D]');
+    }
+  }
+
+  window.addEventListener('scroll', updateNav, { passive: true });
+  updateNav();
+
+  const mobileMenu = document.getElementById('mobile-menu');
+  const closeMenu = document.getElementById('close-menu');
+
+  hamburger?.addEventListener('click', () => {
+    mobileMenu?.classList.remove('hidden');
+    document.body.style.overflow = 'hidden';
+  });
+  closeMenu?.addEventListener('click', () => {
+    mobileMenu?.classList.add('hidden');
+    document.body.style.overflow = '';
+  });
+  mobileMenu?.querySelectorAll('a').forEach(a => {
+    a.addEventListener('click', () => {
+      mobileMenu?.classList.add('hidden');
+      document.body.style.overflow = '';
+    });
+  });
+</script>

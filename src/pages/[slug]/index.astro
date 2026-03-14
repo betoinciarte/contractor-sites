@@ -1,0 +1,240 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Nav from '../../components/Nav.astro';
+import Footer from '../../components/Footer.astro';
+import MobileCTA from '../../components/MobileCTA.astro';
+import ContactForm from '../../components/ContactForm';
+import { contractor, services, reviews, stats } from '../../data/demo';
+
+const title = `${contractor.business_name} — Concrete in ${contractor.service_areas[0]}`;
+const description = `Professional concrete services in ${contractor.service_areas.slice(0,3).join(', ')}. Licensed, insured, free estimates.`;
+---
+
+<BaseLayout title={title} description={description}>
+  <Nav
+    slug={contractor.slug}
+    businessName={contractor.business_name}
+    phone={contractor.phone}
+    phoneRaw={contractor.phoneRaw}
+    activePage="home"
+  />
+
+  <!-- S1: HERO -->
+  <section data-hero class="relative min-h-dvh flex items-center justify-center overflow-hidden">
+    <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1590496793929-36417d3117de?w=1600')] bg-cover bg-center hero-bg"></div>
+    <div class="absolute inset-0 bg-gradient-to-b from-black/30 to-black/60"></div>
+
+    <div class="relative z-10 text-center px-6 max-w-3xl">
+      <p class="text-[13px] uppercase tracking-[0.1em] text-white/70 mb-4 font-medium">
+        Trusted by {stats.projects}+ homeowners in {contractor.service_areas[0]}
+      </p>
+      <h1 class="font-heading font-extrabold text-white text-4xl md:text-[52px] leading-[1.1] mb-4">
+        Concrete Work You Can Trust
+      </h1>
+      <p class="text-white/80 text-lg md:text-xl mb-8 mx-auto max-w-xl">
+        We never sell you work you don't need. {stats.years}+ years serving {contractor.service_areas.slice(0,3).join(', ')}. Licensed &amp; insured.
+      </p>
+      <div class="flex flex-col sm:flex-row gap-3 justify-center mb-6">
+        <a href={`/${contractor.slug}/contact`} class="bg-[#E87C3E] text-white px-8 py-4 rounded-xl font-bold text-base shadow-lg hover:shadow-xl hover:scale-[1.02] transition-all">
+          Get Your Free Estimate
+        </a>
+        <a href={`/${contractor.slug}/gallery`} class="border border-white/30 text-white px-8 py-4 rounded-xl font-semibold text-base backdrop-blur-sm hover:bg-white/10 transition-all">
+          View Our Work
+        </a>
+      </div>
+      <div class="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm rounded-full px-5 py-2.5 text-white text-sm">
+        <span class="text-[#F59E0B]">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
+        <span>{stats.rating}</span>
+        <span class="text-white/50">&middot;</span>
+        <span>{stats.projects}+ Reviews</span>
+        <span class="text-white/50">&middot;</span>
+        <span>Licensed &amp; Insured</span>
+      </div>
+    </div>
+
+    <div class="absolute bottom-8 left-1/2 -translate-x-1/2 bounce-down">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" opacity="0.5"><path d="M6 9l6 6 6-6"></path></svg>
+    </div>
+  </section>
+
+  <!-- S2: TRUST BAR -->
+  <section class="bg-white border-y border-black/5 py-6 reveal">
+    <div class="max-w-[1200px] mx-auto px-6 grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+      <div>
+        <div class="font-heading font-extrabold text-[32px] text-[#1B2B3D]">{stats.years}+</div>
+        <div class="text-[13px] uppercase tracking-wide text-[#6B7C8D] font-medium">Years Experience</div>
+      </div>
+      <div>
+        <div class="font-heading font-extrabold text-[32px] text-[#1B2B3D]">{stats.projects}+</div>
+        <div class="text-[13px] uppercase tracking-wide text-[#6B7C8D] font-medium">Projects Completed</div>
+      </div>
+      <div>
+        <div class="font-heading font-extrabold text-[32px] text-[#1B2B3D]">&#9733; {stats.rating}</div>
+        <div class="text-[13px] uppercase tracking-wide text-[#6B7C8D] font-medium">Google Rating</div>
+      </div>
+      <div>
+        <div class="font-heading font-extrabold text-[32px] text-[#1B2B3D]">{stats.satisfaction}%</div>
+        <div class="text-[13px] uppercase tracking-wide text-[#6B7C8D] font-medium">Satisfaction</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- S3: SERVICES -->
+  <section id="services" class="bg-[#F7F5F0] py-20">
+    <div class="max-w-[1200px] mx-auto px-6">
+      <h2 class="font-heading font-bold text-3xl md:text-[36px] text-center mb-12">Our Services</h2>
+      <div class="grid md:grid-cols-3 gap-6 reveal-stagger">
+        {services.map((s) => (
+          <a href={`/${contractor.slug}/services#${s.name.toLowerCase().replace(/\s+/g, '-')}`} class="bg-white rounded-2xl overflow-hidden shadow-[0_1px_3px_rgba(0,0,0,0.05)] hover:-translate-y-1 hover:shadow-[0_20px_40px_rgba(0,0,0,0.08)] transition-all duration-300 block">
+            <div class="aspect-[16/10] bg-[#E5E0D8]"></div>
+            <div class="p-6">
+              <h3 class="font-heading font-bold text-xl mb-1">{s.name}</h3>
+              <p class="text-[15px] text-[#6B7C8D] mb-3">{s.desc}</p>
+              <p class="text-[15px] font-medium text-[#E87C3E]">Starting at {s.price}</p>
+            </div>
+          </a>
+        ))}
+      </div>
+      <div class="text-center mt-10">
+        <a href={`/${contractor.slug}/services`} class="inline-flex items-center gap-2 text-[#1E3D5F] font-semibold text-[15px] hover:underline">
+          See detailed pricing &amp; FAQs &rarr;
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- S5: WHY CHOOSE US -->
+  <section class="py-20 reveal">
+    <div class="max-w-[1200px] mx-auto px-6 grid md:grid-cols-2 gap-12 items-center">
+      <div>
+        <h2 class="font-heading font-bold text-3xl md:text-[36px] mb-8">Why Homeowners Choose Us</h2>
+        <div class="space-y-5">
+          {[
+            { title: "We tell you what you DON'T need", sub: "9.5% of our reviews mention our honesty — our #1 value" },
+            { title: "Obsessive cleanup guaranteed", sub: "21.4% of customers specifically praise our cleanup" },
+            { title: "Fixed pricing — no surprises", sub: "Our quote is the price. Period. No hidden costs." },
+            { title: "Warranty you can actually use", sub: `${contractor.warranty_text} — no technicalities` },
+          ].map((item) => (
+            <div class="flex gap-4">
+              <div class="w-8 h-8 rounded-full bg-[#E87C3E]/10 flex items-center justify-center flex-shrink-0 mt-0.5">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#E87C3E" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              </div>
+              <div>
+                <p class="font-semibold text-[#1B2B3D]">{item.title}</p>
+                <p class="text-[15px] text-[#6B7C8D]">{item.sub}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+        <blockquote class="mt-8 border-l-4 border-[#E87C3E] pl-6 italic text-[#6B7C8D]">
+          "Winner among 3+ quotes is ALMOST NEVER the cheapest — it's the most honest and communicative."
+          <span class="block mt-2 text-[13px] not-italic">— Based on 750+ customer reviews</span>
+        </blockquote>
+      </div>
+      <div class="space-y-4">
+        {[
+          { num: '52.4%', text: 'of customers recommend us to friends' },
+          { num: '42.6%', text: 'mention our crew by name in reviews' },
+          { num: '21.4%', text: 'specifically praise our cleanup' },
+        ].map((stat) => (
+          <div class="bg-[#F7F5F0] rounded-2xl p-8 text-center">
+            <div class="font-heading font-extrabold text-4xl text-[#1E3D5F]">{stat.num}</div>
+            <p class="text-[15px] text-[#6B7C8D] mt-1">{stat.text}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- S6: TESTIMONIALS -->
+  <section id="reviews" class="bg-[#F7F5F0] py-20">
+    <div class="max-w-[1200px] mx-auto px-6">
+      <h2 class="font-heading font-bold text-3xl md:text-[36px] text-center mb-12">What Our Customers Say</h2>
+      <div class="grid md:grid-cols-3 gap-6 reveal-stagger">
+        {reviews.map((review) => (
+          <div class="bg-white rounded-2xl p-8 shadow-[0_1px_3px_rgba(0,0,0,0.05)] relative">
+            <div class="absolute top-4 right-6 text-[#E87C3E]/20 text-5xl font-serif leading-none">&ldquo;</div>
+            <p class="text-[17px] italic leading-relaxed text-[#3D4F5F] mb-4">&ldquo;{review.text}&rdquo;</p>
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-1">
+                <span class="text-[#F59E0B]">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
+                <span class="text-[13px] text-[#6B7C8D] ml-2">— {review.name}, {review.location}</span>
+              </div>
+            </div>
+            <p class="text-[13px] text-[#6B7C8D] mt-2">{review.service}</p>
+          </div>
+        ))}
+      </div>
+      {contractor.google_reviews_link && (
+        <div class="text-center mt-8">
+          <a href={contractor.google_reviews_link} target="_blank" rel="noopener" class="inline-flex items-center gap-2 text-[15px] font-medium text-[#1E3D5F] hover:underline">
+            See all reviews on Google &rarr;
+          </a>
+        </div>
+      )}
+    </div>
+  </section>
+
+  <!-- S7: PROCESS -->
+  <section class="py-20 reveal">
+    <div class="max-w-[1200px] mx-auto px-6">
+      <h2 class="font-heading font-bold text-3xl md:text-[36px] text-center mb-12">How It Works</h2>
+      <div class="grid md:grid-cols-4 gap-8 text-center reveal-stagger">
+        {[
+          { step: '1', title: 'Free Consultation', desc: 'Call or fill out our form. We call you within 30 minutes.' },
+          { step: '2', title: 'Custom Estimate', desc: 'We visit, measure, and prepare a detailed estimate — no pressure.' },
+          { step: '3', title: 'Expert Installation', desc: 'Our crew handles everything. Daily updates, professional cleanup.' },
+          { step: '4', title: 'Your Satisfaction', desc: 'Final walk-through, thorough cleanup, and a warranty you can count on.' },
+        ].map((s) => (
+          <div>
+            <div class="w-12 h-12 rounded-full bg-[#1E3D5F]/10 text-[#1E3D5F] font-heading font-bold text-xl flex items-center justify-center mx-auto mb-4">{s.step}</div>
+            <h3 class="font-heading font-semibold text-lg mb-2">{s.title}</h3>
+            <p class="text-[15px] text-[#6B7C8D]">{s.desc}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- S8: CTA BANNER -->
+  <section class="bg-[#1E3D5F] py-16">
+    <div class="max-w-[800px] mx-auto px-6 text-center">
+      <h2 class="font-heading font-bold text-3xl md:text-[36px] text-white mb-3">Ready to Transform Your Property?</h2>
+      <p class="text-white/70 text-lg mb-8">Get a free, no-obligation estimate. We respond within 30 minutes.</p>
+      <div class="flex flex-col sm:flex-row gap-3 justify-center">
+        <a href={`/${contractor.slug}/contact`} class="bg-[#E87C3E] text-white px-8 py-4 rounded-xl font-bold text-base shadow-lg hover:opacity-90 transition-opacity">
+          Get Free Estimate
+        </a>
+        <a href={`tel:${contractor.phoneRaw}`} class="border border-white/30 text-white px-8 py-4 rounded-xl font-semibold hover:bg-white/10 transition-all">
+          {contractor.phone}
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- S9: CONTACT FORM -->
+  <section id="contact" class="py-20">
+    <div class="max-w-[560px] mx-auto px-6">
+      <h2 class="font-heading font-bold text-3xl md:text-[36px] text-center mb-3">Get Your Free Estimate</h2>
+      <p class="text-center text-[#6B7C8D] mb-8">Fill out the form — we'll call you within 30 minutes.</p>
+      <ContactForm
+        client:visible
+        services={services.map(s => ({ name: s.name }))}
+        slug={contractor.slug}
+        phone={contractor.phone}
+      />
+    </div>
+  </section>
+
+  <Footer
+    slug={contractor.slug}
+    businessName={contractor.business_name}
+    phone={contractor.phone}
+    phoneRaw={contractor.phoneRaw}
+    licenseNumber={contractor.license_number}
+    serviceAreas={contractor.service_areas}
+    businessHours={contractor.business_hours}
+  />
+
+  <MobileCTA phoneRaw={contractor.phoneRaw} contactHref={`/${contractor.slug}/contact`} />
+</BaseLayout>
