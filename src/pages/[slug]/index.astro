@@ -4,7 +4,8 @@ import Nav from '../../components/Nav.astro';
 import Footer from '../../components/Footer.astro';
 import MobileCTA from '../../components/MobileCTA.astro';
 import ContactForm from '../../components/ContactForm';
-import { contractor, services, reviews, stats } from '../../data/demo';
+import BeforeAfterSlider from '../../components/BeforeAfterSlider';
+import { contractor, services, reviews, stats, heroImage, crewImage, processImages, beforeAfterPairs, badges } from '../../data/demo';
 
 const title = `${contractor.business_name} — Concrete in ${contractor.service_areas[0]}`;
 const description = `Professional concrete services in ${contractor.service_areas.slice(0,3).join(', ')}. Licensed, insured, free estimates.`;
@@ -21,7 +22,7 @@ const description = `Professional concrete services in ${contractor.service_area
 
   <!-- S1: HERO -->
   <section data-hero class="relative min-h-dvh flex items-center justify-center overflow-hidden">
-    <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1590496793929-36417d3117de?w=1600')] bg-cover bg-center hero-bg"></div>
+    <img src={heroImage} alt={`${contractor.business_name} professional concrete work`} class="absolute inset-0 w-full h-full object-cover hero-bg" />
     <div class="absolute inset-0 bg-gradient-to-b from-black/30 to-black/60"></div>
 
     <div class="relative z-10 text-center px-6 max-w-3xl">
@@ -58,22 +59,22 @@ const description = `Professional concrete services in ${contractor.service_area
   </section>
 
   <!-- S2: TRUST BAR -->
-  <section class="bg-white border-y border-black/5 py-6 reveal">
+  <section class="bg-white border-y border-black/5 py-6" id="trust-bar">
     <div class="max-w-[1200px] mx-auto px-6 grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
       <div>
-        <div class="font-heading font-extrabold text-[32px] text-[#1B2B3D]">{stats.years}+</div>
+        <div class="font-heading font-extrabold text-[32px] text-[#1B2B3D]" data-counter={stats.years}>0</div>
         <div class="text-[13px] uppercase tracking-wide text-[#6B7C8D] font-medium">Years Experience</div>
       </div>
       <div>
-        <div class="font-heading font-extrabold text-[32px] text-[#1B2B3D]">{stats.projects}+</div>
+        <div class="font-heading font-extrabold text-[32px] text-[#1B2B3D]" data-counter={stats.projects}>0</div>
         <div class="text-[13px] uppercase tracking-wide text-[#6B7C8D] font-medium">Projects Completed</div>
       </div>
       <div>
-        <div class="font-heading font-extrabold text-[32px] text-[#1B2B3D]">&#9733; {stats.rating}</div>
+        <div class="font-heading font-extrabold text-[32px] text-[#1B2B3D]" data-counter-decimal={stats.rating}>0</div>
         <div class="text-[13px] uppercase tracking-wide text-[#6B7C8D] font-medium">Google Rating</div>
       </div>
       <div>
-        <div class="font-heading font-extrabold text-[32px] text-[#1B2B3D]">{stats.satisfaction}%</div>
+        <div class="font-heading font-extrabold text-[32px] text-[#1B2B3D]" data-counter={stats.satisfaction}>0</div>
         <div class="text-[13px] uppercase tracking-wide text-[#6B7C8D] font-medium">Satisfaction</div>
       </div>
     </div>
@@ -86,7 +87,9 @@ const description = `Professional concrete services in ${contractor.service_area
       <div class="grid md:grid-cols-3 gap-6 reveal-stagger">
         {services.map((s) => (
           <a href={`/${contractor.slug}/services#${s.name.toLowerCase().replace(/\s+/g, '-')}`} class="bg-white rounded-2xl overflow-hidden shadow-[0_1px_3px_rgba(0,0,0,0.05)] hover:-translate-y-1 hover:shadow-[0_20px_40px_rgba(0,0,0,0.08)] transition-all duration-300 block">
-            <div class="aspect-[16/10] bg-[#E5E0D8]"></div>
+            <div class="aspect-[16/10] overflow-hidden">
+              <img src={s.image} alt={s.name} loading="lazy" class="w-full h-full object-cover hover:scale-105 transition-transform duration-500" />
+            </div>
             <div class="p-6">
               <h3 class="font-heading font-bold text-xl mb-1">{s.name}</h3>
               <p class="text-[15px] text-[#6B7C8D] mb-3">{s.desc}</p>
@@ -100,6 +103,15 @@ const description = `Professional concrete services in ${contractor.service_area
           See detailed pricing &amp; FAQs &rarr;
         </a>
       </div>
+    </div>
+  </section>
+
+  <!-- S4: BEFORE/AFTER -->
+  <section class="bg-[#111827] py-20">
+    <div class="max-w-[1000px] mx-auto px-6">
+      <p class="text-[13px] uppercase tracking-[0.05em] text-[#E87C3E] font-semibold text-center mb-3">Real Results</p>
+      <h2 class="font-heading font-bold text-3xl md:text-[36px] text-white text-center mb-10">See the Transformation</h2>
+      <BeforeAfterSlider client:visible pairs={beforeAfterPairs} />
     </div>
   </section>
 
@@ -132,13 +144,16 @@ const description = `Professional concrete services in ${contractor.service_area
         </blockquote>
       </div>
       <div class="space-y-4">
+        <div class="rounded-2xl overflow-hidden mb-4">
+          <img src={crewImage} alt={`${contractor.business_name} crew`} loading="lazy" class="w-full h-auto rounded-2xl" />
+        </div>
         {[
           { num: '52.4%', text: 'of customers recommend us to friends' },
           { num: '42.6%', text: 'mention our crew by name in reviews' },
           { num: '21.4%', text: 'specifically praise our cleanup' },
         ].map((stat) => (
-          <div class="bg-[#F7F5F0] rounded-2xl p-8 text-center">
-            <div class="font-heading font-extrabold text-4xl text-[#1E3D5F]">{stat.num}</div>
+          <div class="bg-[#F7F5F0] rounded-2xl p-6 text-center">
+            <div class="font-heading font-extrabold text-3xl text-[#1E3D5F]">{stat.num}</div>
             <p class="text-[15px] text-[#6B7C8D] mt-1">{stat.text}</p>
           </div>
         ))}
@@ -150,9 +165,9 @@ const description = `Professional concrete services in ${contractor.service_area
   <section id="reviews" class="bg-[#F7F5F0] py-20">
     <div class="max-w-[1200px] mx-auto px-6">
       <h2 class="font-heading font-bold text-3xl md:text-[36px] text-center mb-12">What Our Customers Say</h2>
-      <div class="grid md:grid-cols-3 gap-6 reveal-stagger">
+      <div class="flex gap-6 overflow-x-auto snap-x snap-mandatory md:grid md:grid-cols-3 md:overflow-visible pb-4 md:pb-0 reveal-stagger" style="scrollbar-width: none;">
         {reviews.map((review) => (
-          <div class="bg-white rounded-2xl p-8 shadow-[0_1px_3px_rgba(0,0,0,0.05)] relative">
+          <div class="bg-white rounded-2xl p-8 shadow-[0_1px_3px_rgba(0,0,0,0.05)] relative flex-shrink-0 w-[85vw] md:w-auto snap-center">
             <div class="absolute top-4 right-6 text-[#E87C3E]/20 text-5xl font-serif leading-none">&ldquo;</div>
             <p class="text-[17px] italic leading-relaxed text-[#3D4F5F] mb-4">&ldquo;{review.text}&rdquo;</p>
             <div class="flex items-center justify-between">
@@ -179,20 +194,36 @@ const description = `Professional concrete services in ${contractor.service_area
   <section class="py-20 reveal">
     <div class="max-w-[1200px] mx-auto px-6">
       <h2 class="font-heading font-bold text-3xl md:text-[36px] text-center mb-12">How It Works</h2>
-      <div class="grid md:grid-cols-4 gap-8 text-center reveal-stagger">
+      <div class="grid md:grid-cols-4 gap-8 text-center process-steps reveal-stagger">
         {[
-          { step: '1', title: 'Free Consultation', desc: 'Call or fill out our form. We call you within 30 minutes.' },
-          { step: '2', title: 'Custom Estimate', desc: 'We visit, measure, and prepare a detailed estimate — no pressure.' },
-          { step: '3', title: 'Expert Installation', desc: 'Our crew handles everything. Daily updates, professional cleanup.' },
-          { step: '4', title: 'Your Satisfaction', desc: 'Final walk-through, thorough cleanup, and a warranty you can count on.' },
+          { step: '1', title: 'Free Consultation', desc: 'Call or fill out our form. We call you within 30 minutes.', image: null },
+          { step: '2', title: 'Custom Estimate', desc: 'We visit, measure, and prepare a detailed estimate — no pressure.', image: processImages[0] },
+          { step: '3', title: 'Expert Installation', desc: 'Our crew handles everything. Daily updates, professional cleanup.', image: processImages[1] },
+          { step: '4', title: 'Your Satisfaction', desc: 'Final walk-through, thorough cleanup, and a warranty you can count on.', image: processImages[2] },
         ].map((s) => (
-          <div>
-            <div class="w-12 h-12 rounded-full bg-[#1E3D5F]/10 text-[#1E3D5F] font-heading font-bold text-xl flex items-center justify-center mx-auto mb-4">{s.step}</div>
+          <div class="process-step">
+            {s.image && (
+              <div class="w-20 h-20 rounded-2xl overflow-hidden mx-auto mb-3">
+                <img src={s.image} alt={s.title} loading="lazy" class="w-full h-full object-cover" />
+              </div>
+            )}
+            {!s.image && (
+              <div class="w-12 h-12 rounded-full bg-[#1E3D5F]/10 text-[#1E3D5F] font-heading font-bold text-xl flex items-center justify-center mx-auto mb-4">{s.step}</div>
+            )}
             <h3 class="font-heading font-semibold text-lg mb-2">{s.title}</h3>
             <p class="text-[15px] text-[#6B7C8D]">{s.desc}</p>
           </div>
         ))}
       </div>
+    </div>
+  </section>
+
+  <!-- BADGES -->
+  <section class="py-8 bg-[#F7F5F0]">
+    <div class="max-w-[900px] mx-auto px-6 flex flex-wrap justify-center gap-6 items-center">
+      {badges.map((badge) => (
+        <img src={badge} alt="Trust badge" loading="lazy" class="h-16 w-auto opacity-80 hover:opacity-100 transition-opacity" />
+      ))}
     </div>
   </section>
 
@@ -237,4 +268,40 @@ const description = `Professional concrete services in ${contractor.service_area
   />
 
   <MobileCTA phoneRaw={contractor.phoneRaw} contactHref={`/${contractor.slug}/contact`} />
+
+  <!-- Counter animation -->
+  <script>
+    const trustBar = document.getElementById('trust-bar');
+    if (trustBar) {
+      let animated = false;
+      const observer = new IntersectionObserver((entries) => {
+        if (entries[0].isIntersecting && !animated) {
+          animated = true;
+          trustBar.querySelectorAll('[data-counter]').forEach(el => {
+            const target = parseInt(el.getAttribute('data-counter')!);
+            const suffix = target === 100 ? '%' : '+';
+            animateCounter(el as HTMLElement, 0, target, 1500, v => `${v}${suffix}`);
+          });
+          trustBar.querySelectorAll('[data-counter-decimal]').forEach(el => {
+            const target = parseFloat(el.getAttribute('data-counter-decimal')!);
+            animateCounter(el as HTMLElement, 0, target * 10, 1500, v => `★ ${(v / 10).toFixed(1)}`);
+          });
+        }
+      }, { threshold: 0.3 });
+      observer.observe(trustBar);
+    }
+
+    function animateCounter(el: HTMLElement, start: number, end: number, duration: number, format: (v: number) => string) {
+      const startTime = performance.now();
+      function update(now: number) {
+        const elapsed = now - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+        const eased = 1 - Math.pow(1 - progress, 3);
+        const current = Math.round(start + (end - start) * eased);
+        el.textContent = format(current);
+        if (progress < 1) requestAnimationFrame(update);
+      }
+      requestAnimationFrame(update);
+    }
+  </script>
 </BaseLayout>

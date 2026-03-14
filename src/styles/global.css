@@ -63,6 +63,30 @@
 @keyframes bounce-down { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(8px); } }
 .bounce-down { animation: bounce-down 2s ease-in-out infinite; }
 
+/* Process step connectors */
+@media (min-width: 768px) {
+  .process-steps { position: relative; }
+  .process-step { position: relative; }
+  .process-step:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    top: 2rem;
+    right: -1rem;
+    width: 2rem;
+    border-top: 2px dashed #E5E0D8;
+  }
+}
+@media (max-width: 767px) {
+  .process-step:not(:last-child)::after {
+    content: '';
+    display: block;
+    width: 2px;
+    height: 1.5rem;
+    border-left: 2px dashed #E5E0D8;
+    margin: 0.75rem auto;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .reveal, .reveal-stagger > * { opacity: 1; transform: none; transition: none; }
   .hero-bg, .bounce-down { animation: none; }

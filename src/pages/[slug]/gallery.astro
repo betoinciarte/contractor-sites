@@ -4,7 +4,8 @@ import Nav from '../../components/Nav.astro';
 import Footer from '../../components/Footer.astro';
 import MobileCTA from '../../components/MobileCTA.astro';
 import GalleryGrid from '../../components/GalleryGrid';
-import { contractor, galleryProjects } from '../../data/demo';
+import BeforeAfterSlider from '../../components/BeforeAfterSlider';
+import { contractor, galleryProjects, beforeAfterPairs } from '../../data/demo';
 
 const title = `Our Work — ${contractor.business_name}`;
 const description = `Browse our portfolio of concrete projects in ${contractor.service_areas.slice(0,3).join(', ')}. Driveways, patios, foundations, and more.`;
@@ -30,9 +31,18 @@ const description = `Browse our portfolio of concrete projects in ${contractor.s
     </div>
   </section>
 
+  <!-- Featured Transformations -->
+  <section class="bg-[#111827] py-16">
+    <div class="max-w-[1000px] mx-auto px-6">
+      <h2 class="font-heading font-bold text-2xl md:text-3xl text-white text-center mb-8">Featured Transformations</h2>
+      <BeforeAfterSlider client:visible pairs={beforeAfterPairs} />
+    </div>
+  </section>
+
   <!-- Gallery Grid -->
   <section class="py-20">
     <div class="max-w-[1200px] mx-auto px-6">
+      <h2 class="font-heading font-bold text-2xl md:text-3xl text-center mb-10">All Projects</h2>
       <GalleryGrid client:load projects={galleryProjects} />
     </div>
   </section>
