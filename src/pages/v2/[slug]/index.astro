@@ -11,6 +11,8 @@ const data = getContractor(slug!);
 if (!data) return new Response(null, { status: 404, statusText: 'Contractor not found' });
 
 const { contractor, services, reviews, stats, statCards, heroImage, crewImage, processImages, beforeAfterPairs, badges } = data;
+const pc = (data as any).personalizedCopy || null;
+const accent = (data as any).brandAccent || '#E87C3E';
 const callNumber = contractor.voicePhoneRaw || contractor.phoneRaw;
 const hasVoiceAI = contractor.hasVoiceAI !== false;
 
@@ -46,15 +48,12 @@ const description = `Professional concrete services in ${contractor.service_area
         ALT B (Trust-focused): "Dallas trusts Rodriguez Concrete. 4.9 stars and 15 years of keeping our word."
         ALT C (Problem-focused): "Stop worrying about your driveway. Start enjoying it."
       -->
-      <h1 class="font-heading font-extrabold text-white text-[clamp(2.5rem,7vw,4.5rem)] leading-[1.05] mb-6 hero-text-2">
-        Beautiful concrete that lasts —
-        <span class="gradient-text">with a price you know before we start.</span>
-      </h1>
+      <h1 class="font-heading font-extrabold text-white text-[clamp(2.5rem,7vw,4.5rem)] leading-[1.05] mb-6 hero-text-2" set:html={pc?.headline || `Beautiful concrete that lasts — <span class="gradient-text">with a price you know before we start.</span>`} />
       <p class="text-white/60 text-lg md:text-xl mb-4 mx-auto max-w-2xl hero-text-3">
-        Licensed, insured, and rated {stats.rating} on Google. We show up when we say we will, charge what we quoted, and clean up when we're done.
+        {pc?.subheadline || `Licensed, insured, and rated ${stats.rating} on Google. We show up when we say we will, charge what we quoted, and clean up when we're done.`}
       </p>
-      <p class="text-[#E87C3E]/80 text-sm mb-10 font-medium hero-text-3">
-        Spring schedules fill up 3–4 weeks out. Book your free estimate now.
+      <p class="text-white/50 text-sm mb-10 font-medium hero-text-3" style={`color: ${accent}cc`}>
+        {pc?.urgency || 'Spring schedules fill up 3–4 weeks out. Book your free estimate now.'}
       </p>
       <div class="flex flex-col sm:flex-row gap-4 justify-center hero-text-4">
         <a href="#quoter" class="bg-[#E87C3E] text-white px-10 py-5 rounded-2xl font-bold text-lg shadow-lg shadow-[#E87C3E]/20 hover:shadow-xl hover:shadow-[#E87C3E]/30 hover:scale-[1.03] transition-all pulse-cta">
@@ -97,7 +96,7 @@ const description = `Professional concrete services in ${contractor.service_area
           Get your estimate in 60 seconds.
         </h2>
         <p class="text-white/40 text-lg mb-10 mx-auto">
-          Trained on 750+ real projects in {contractor.service_areas[0]}. Ask about costs, timelines, or anything about your project.
+          {pc?.quoterSubtext || `Trained on 750+ real projects in ${contractor.service_areas[0]}. Ask about costs, timelines, or anything about your project.`}
         </p>
       </div>
 
@@ -126,33 +125,38 @@ const description = `Professional concrete services in ${contractor.service_area
       </div>
 
       <div class="grid sm:grid-cols-2 gap-6 scroll-stagger">
-        <!-- Fear 1: Upselling -->
-        <div class="glass-card p-8 group hover:bg-white/10 transition-colors">
-          <p class="text-white/30 text-[13px] uppercase tracking-wider mb-3">"What if they upsell me?"</p>
-          <h3 class="font-heading font-bold text-xl text-white mb-2">We tell you what you DON'T need.</h3>
-          <p class="text-white/50 text-[15px] leading-relaxed">9.5% of our reviews explicitly mention our honesty as the #1 reason they chose us. We've told homeowners they don't need foundation repair — and saved them thousands.</p>
-        </div>
-
-        <!-- Fear 2: Hidden costs -->
-        <div class="glass-card p-8 group hover:bg-white/10 transition-colors">
-          <p class="text-white/30 text-[13px] uppercase tracking-wider mb-3">"What about hidden costs?"</p>
-          <h3 class="font-heading font-bold text-xl text-white mb-2">Our quote is the price. Period.</h3>
-          <p class="text-white/50 text-[15px] leading-relaxed">If something unexpected comes up during the job, we discuss it with you before doing anything extra. No surprises, no escalation. 8.3% of negative contractor reviews mention this — we won't be one of them.</p>
-        </div>
-
-        <!-- Fear 3: Warranty -->
-        <div class="glass-card p-8 group hover:bg-white/10 transition-colors">
-          <p class="text-white/30 text-[13px] uppercase tracking-wider mb-3">"Will the warranty actually work?"</p>
-          <h3 class="font-heading font-bold text-xl text-white mb-2">No fine print. We've honored every claim.</h3>
-          <p class="text-white/50 text-[15px] leading-relaxed">37% of negative contractor reviews are about warranty issues. Our warranty is straightforward and transferable — if you sell your home, the warranty goes with it.</p>
-        </div>
-
-        <!-- Fear 4: Mess -->
-        <div class="glass-card p-8 group hover:bg-white/10 transition-colors">
-          <p class="text-white/30 text-[13px] uppercase tracking-wider mb-3">"Will they leave a mess?"</p>
-          <h3 class="font-heading font-bold text-xl text-white mb-2">Left cleaner than we found it.</h3>
-          <p class="text-white/50 text-[15px] leading-relaxed">21.4% of our reviews specifically praise our cleanup — that's not normal for concrete contractors. We protect your landscaping, document everything, and clean up daily.</p>
-        </div>
+        {pc?.fearDefusers ? (
+          pc.fearDefusers.map((fd: any) => (
+            <div class="glass-card p-8 group hover:bg-white/10 transition-colors">
+              <p class="text-white/30 text-[13px] uppercase tracking-wider mb-3">{fd.fear}</p>
+              <h3 class="font-heading font-bold text-xl text-white mb-2">{fd.answer}</h3>
+              <p class="text-white/50 text-[15px] leading-relaxed">{fd.detail}</p>
+            </div>
+          ))
+        ) : (
+          <>
+            <div class="glass-card p-8 group hover:bg-white/10 transition-colors">
+              <p class="text-white/30 text-[13px] uppercase tracking-wider mb-3">"What if they upsell me?"</p>
+              <h3 class="font-heading font-bold text-xl text-white mb-2">We tell you what you DON'T need.</h3>
+              <p class="text-white/50 text-[15px] leading-relaxed">9.5% of our reviews explicitly mention our honesty as the #1 reason they chose us.</p>
+            </div>
+            <div class="glass-card p-8 group hover:bg-white/10 transition-colors">
+              <p class="text-white/30 text-[13px] uppercase tracking-wider mb-3">"What about hidden costs?"</p>
+              <h3 class="font-heading font-bold text-xl text-white mb-2">Our quote is the price. Period.</h3>
+              <p class="text-white/50 text-[15px] leading-relaxed">No surprises, no escalation. The price we quote is the price you pay.</p>
+            </div>
+            <div class="glass-card p-8 group hover:bg-white/10 transition-colors">
+              <p class="text-white/30 text-[13px] uppercase tracking-wider mb-3">"Will they leave a mess?"</p>
+              <h3 class="font-heading font-bold text-xl text-white mb-2">Left cleaner than we found it.</h3>
+              <p class="text-white/50 text-[15px] leading-relaxed">We protect your landscaping, document everything, and clean up daily.</p>
+            </div>
+            <div class="glass-card p-8 group hover:bg-white/10 transition-colors">
+              <p class="text-white/30 text-[13px] uppercase tracking-wider mb-3">"Will they communicate?"</p>
+              <h3 class="font-heading font-bold text-xl text-white mb-2">You always know what's happening.</h3>
+              <p class="text-white/50 text-[15px] leading-relaxed">Clear communication at every step. No ghosting, no guessing.</p>
+            </div>
+          </>
+        )}
       </div>
     </div>
   </section>
@@ -163,7 +167,7 @@ const description = `Professional concrete services in ${contractor.service_area
   <section class="py-14 relative">
     <div class="absolute inset-0 bg-[#0a0e17]"></div>
     <div class="relative z-10 max-w-3xl mx-auto px-6 text-center scroll-reveal">
-      <p class="text-white/50 text-lg mb-6">Got questions about your project? Get real pricing — no sales pitch.</p>
+      <p class="text-white/50 text-lg mb-6">{pc?.midCtaText || 'Got questions about your project? Get real pricing — no sales pitch.'}</p>
       <div class="flex flex-col sm:flex-row gap-4 justify-center">
         <a href="#quoter" class="bg-[#E87C3E] text-white px-8 py-4 rounded-2xl font-bold text-lg hover:opacity-90 transition-opacity">
           Chat With Us
@@ -222,11 +226,11 @@ const description = `Professional concrete services in ${contractor.service_area
           <div class="step-dot w-3 h-3 rounded-full bg-white/20 transition-all"></div>
         </div>
         <div class="relative h-[50vh]" id="process-cards">
-          {[
-            { num: '01', title: 'Call or Chat. Get a Price in Minutes.', desc: 'Call us or use our online estimator — you get a ballpark price right away. No waiting, no voicemail. Then we schedule a free on-site visit at your convenience.', image: processImages[0] },
-            { num: '02', title: 'Free On-Site Estimate. No Surprises.', desc: 'We come to your property, measure everything, and give you a fixed price in writing. That quote is the price — period. No hidden fees, no change orders you didn\'t approve.', image: processImages[1] },
-            { num: '03', title: 'We Build. You Relax.', desc: 'Our crew arrives on schedule with daily photo updates so you always know the status. When we\'re done: walk-through inspection, professional cleanup, and your warranty documentation. Most projects: 2–5 days.', image: processImages[2] },
-          ].map((step, i) => (
+          {(pc?.processSteps || [
+            { num: '01', title: 'Call or Chat. Get a Price in Minutes.', desc: 'Call us or use our online estimator — you get a ballpark price right away. No waiting, no voicemail. Then we schedule a free on-site visit at your convenience.' },
+            { num: '02', title: 'Free On-Site Estimate. No Surprises.', desc: 'We come to your property, measure everything, and give you a fixed price in writing. That quote is the price — period. No hidden fees, no change orders you didn\'t approve.' },
+            { num: '03', title: 'We Build. You Relax.', desc: 'Our crew arrives on schedule with daily photo updates. When we\'re done: walk-through inspection, professional cleanup, and your warranty documentation. Most projects: 2–5 days.' },
+          ]).map((step: any, i: number) => ({ ...step, image: processImages[i] })).map((step: any, i: number) => (
             <div class={`process-step-card ${i === 0 ? 'active' : ''}`} data-step={i}>
               <div class="grid md:grid-cols-2 gap-8 items-center max-w-4xl mx-auto">
                 <div class="order-2 md:order-1">
@@ -262,13 +266,13 @@ const description = `Professional concrete services in ${contractor.service_area
         <div class="scroll-reveal">
           <p class="text-[13px] uppercase tracking-[0.15em] text-[#E87C3E] font-semibold mb-3">Meet Your Contractor</p>
           <h2 class="font-heading font-extrabold text-2xl md:text-3xl text-white mb-4">
-            {contractor.owner_name}. {stats.years} years. Same phone number.
+            {pc?.meetHeadline || `${contractor.owner_name}. ${stats.years} years. Same phone number.`}
           </h2>
           <p class="text-white/60 text-[17px] leading-relaxed mb-4">
-            {contractor.owner_name} started {contractor.business_name} {stats.years} years ago with one truck and a simple promise: treat every driveway like it was his own. Today, the trucks have multiplied — but the promise hasn't changed.
+            {pc?.meetText1 || `${contractor.owner_name} started ${contractor.business_name} ${stats.years} years ago with one truck and a simple promise: treat every driveway like it was his own. Today, the trucks have multiplied — but the promise hasn't changed.`}
           </p>
           <p class="text-white/60 text-[17px] leading-relaxed mb-6">
-            Every project is personally reviewed. Every crew member is trained in-house. And when you call, you're talking to people who live and work in {contractor.service_areas[0]} — not a call center.
+            {pc?.meetText2 || `Every project is personally reviewed. Every crew member is trained in-house. And when you call, you're talking to people who live and work in ${contractor.service_areas[0]} — not a call center.`}
           </p>
           <div class="flex flex-wrap gap-3">
             <span class="text-[13px] text-white/50 bg-white/5 px-4 py-2 rounded-full">Licensed: {contractor.license_number}</span>
@@ -339,8 +343,9 @@ const description = `Professional concrete services in ${contractor.service_area
     <div class="absolute inset-0 bg-[#111827]"></div>
     <div class="relative z-10 max-w-5xl mx-auto px-6">
       <div class="text-center mb-12 scroll-reveal">
-        <p class="text-[13px] uppercase tracking-[0.15em] text-[#E87C3E] font-semibold mb-3">Concrete Services in {contractor.service_areas[0]}</p>
-        <h2 class="font-heading font-bold text-2xl md:text-3xl text-white">Fixed Pricing. No Surprises.</h2>
+        <p class="text-[13px] uppercase tracking-[0.15em] font-semibold mb-3" style={`color: ${accent}`}>Concrete Services in {contractor.service_areas[0]}</p>
+        <h2 class="font-heading font-bold text-2xl md:text-3xl text-white">{pc?.servicesHeading || 'Fixed Pricing. No Surprises.'}</h2>
+        {pc?.servicesSubheading && <p class="text-white/40 text-[15px] mt-2">{pc.servicesSubheading}</p>}
       </div>
       <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 scroll-stagger">
         {services.slice(0, 6).map((s) => (
@@ -365,9 +370,9 @@ const description = `Professional concrete services in ${contractor.service_area
     <div class="absolute inset-0 bg-gradient-to-b from-[#111827] to-[#0a0e17]"></div>
     <div class="relative z-10 max-w-4xl mx-auto px-6 text-center">
       <div class="scroll-reveal">
-        <h2 class="font-heading font-extrabold text-3xl md:text-5xl text-white mb-4">Get your free estimate. Zero obligation.</h2>
-        <p class="text-white/40 text-lg mb-3">Whether you chat, call, or have us call you — straight answers within minutes.</p>
-        <p class="text-white/30 text-sm mb-12">Free estimate &middot; No obligation &middot; {contractor.warranty_text} &middot; Licensed &amp; insured</p>
+        <h2 class="font-heading font-extrabold text-3xl md:text-5xl text-white mb-4">{pc?.ctaHeadline || 'Get your free estimate. Zero obligation.'}</h2>
+        <p class="text-white/40 text-lg mb-3">{pc?.ctaSubtext || 'Whether you chat, call, or have us call you — straight answers within minutes.'}</p>
+        <p class="text-white/30 text-sm mb-12">{pc?.ctaTrust || `Free estimate · No obligation · ${contractor.warranty_text} · Licensed & insured`}</p>
       </div>
 
       <div class="flex flex-col sm:flex-row gap-5 justify-center scroll-stagger">
@@ -394,9 +399,10 @@ const description = `Professional concrete services in ${contractor.service_area
 
   <MobileCTA phoneRaw={callNumber} contactHref="#quoter" />
 
-  <!-- V2: Override process scroll height (300vh → 200vh for less mobile scroll fatigue) -->
-  <style is:global>
+  <!-- V2: CSS overrides -->
+  <style is:global define:vars={{ accent }}>
     .process-scroll { height: 200vh !important; }
+    .gradient-text { background: linear-gradient(135deg, var(--accent), #fff) !important; -webkit-background-clip: text !important; -webkit-text-fill-color: transparent !important; }
   </style>
 
   <!-- SCROLL ENGINE -->

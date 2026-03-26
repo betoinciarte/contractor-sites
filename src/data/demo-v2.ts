@@ -1,5 +1,7 @@
 // Demo data V2 — CRO-optimized version
 // Changes from v1: improved stats, same contractor data
+export const brandAccent = '#E87C3E';
+export const brandPrimary = '#1E3D5F';
 export const contractor = {
   business_name: 'Rodriguez Concrete',
   owner_name: 'Carlos Rodriguez',
