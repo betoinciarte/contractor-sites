@@ -9,9 +9,10 @@ interface Props {
   slug: string;
   businessName: string;
   apiBase?: string;
+  badgeText?: string;
 }
 
-export default function InlineChatV2({ slug, businessName, apiBase = 'https://app.sistemasparacontratistas.com' }: Props) {
+export default function InlineChatV2({ slug, businessName, apiBase = 'https://app.sistemasparacontratistas.com', badgeText = 'AI assistant online — responds instantly' }: Props) {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState('');
   const [streaming, setStreaming] = useState(false);
@@ -100,7 +101,7 @@ export default function InlineChatV2({ slug, businessName, apiBase = 'https://ap
           <div className="text-center mb-8">
             <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm rounded-full px-4 py-2 text-[13px] text-white/60 mb-6">
               <span className="w-2 h-2 bg-[#16A34A] rounded-full animate-pulse" />
-              AI assistant online — responds instantly
+              {badgeText}
             </div>
             <div className="flex flex-wrap justify-center gap-3">
               {quickPrompts.map((prompt) => (

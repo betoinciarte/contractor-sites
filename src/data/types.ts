@@ -18,6 +18,7 @@ export interface ContractorInfo {
   voicePhoneRaw?: string;
   hasVoiceAI?: boolean;
   noindex?: boolean;
+  logoUrl?: string;
 }
 
 export interface Service {

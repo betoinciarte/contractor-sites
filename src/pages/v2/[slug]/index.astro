@@ -10,7 +10,7 @@ const { slug } = Astro.params;
 const data = getContractor(slug!);
 if (!data) return new Response(null, { status: 404, statusText: 'Contractor not found' });
 
-const { contractor, services, reviews, stats, statCards, heroImage, crewImage, processImages, beforeAfterPairs, badges } = data;
+const { contractor, services, reviews, stats, statCards, heroImage, crewImage, processImages, beforeAfterPairs, galleryProjects, badges } = data;
 const pc = (data as any).personalizedCopy || null;
 const accent = (data as any).brandAccent || '#E87C3E';
 const callNumber = contractor.voicePhoneRaw || contractor.phoneRaw;
@@ -30,6 +30,8 @@ const description = `Professional concrete services in ${contractor.service_area
     phoneRaw={contractor.phoneRaw}
     voicePhoneRaw={callNumber}
     activePage="home"
+    logoUrl={contractor.logoUrl}
+    accent={accent}
   />
 
   <!-- ============================================
@@ -40,7 +42,7 @@ const description = `Professional concrete services in ${contractor.service_area
     <div class="absolute inset-0 bg-gradient-to-b from-black/20 via-black/50 to-[#0a0e17]"></div>
 
     <div class="relative z-10 text-center px-6 max-w-4xl">
-      <p class="text-[13px] uppercase tracking-[0.15em] text-[#E87C3E] mb-6 font-semibold hero-text-1">
+      <p class="text-[13px] uppercase tracking-[0.15em] text-[var(--accent)] mb-6 font-semibold hero-text-1">
         {contractor.service_areas[0]} &middot; {stats.years}+ Years &middot; {stats.rating}★ on Google
       </p>
       <!-- A/B TEST HEADLINES (swap for testing):
@@ -56,7 +58,7 @@ const description = `Professional concrete services in ${contractor.service_area
         {pc?.urgency || 'Spring schedules fill up 3–4 weeks out. Book your free estimate now.'}
       </p>
       <div class="flex flex-col sm:flex-row gap-4 justify-center hero-text-4">
-        <a href="#quoter" class="bg-[#E87C3E] text-white px-10 py-5 rounded-2xl font-bold text-lg shadow-lg shadow-[#E87C3E]/20 hover:shadow-xl hover:shadow-[#E87C3E]/30 hover:scale-[1.03] transition-all pulse-cta">
+        <a href="#quoter" class="bg-[var(--accent)] text-white px-10 py-5 rounded-2xl font-bold text-lg shadow-lg shadow-[var(--accent)]/20 hover:shadow-xl hover:shadow-[var(--accent)]/30 hover:scale-[1.03] transition-all pulse-cta">
           Get Your Estimate Online
         </a>
         <a href={`tel:${callNumber}`} class="border border-white/20 text-white px-10 py-5 rounded-2xl font-semibold text-lg backdrop-blur-sm hover:bg-white/10 transition-all">
@@ -91,7 +93,7 @@ const description = `Professional concrete services in ${contractor.service_area
     <div class="absolute inset-0 bg-gradient-to-b from-[#0a0e17] to-[#0f1623]"></div>
     <div class="relative z-10 max-w-3xl mx-auto px-6 text-center">
       <div class="scroll-reveal">
-        <p class="text-[13px] uppercase tracking-[0.15em] text-[#E87C3E] font-semibold mb-3">Online Estimator</p>
+        <p class="text-[13px] uppercase tracking-[0.15em] text-[var(--accent)] font-semibold mb-3">Online Estimator</p>
         <h2 class="font-heading font-extrabold text-3xl md:text-5xl text-white mb-3">
           Get your estimate in 60 seconds.
         </h2>
@@ -100,12 +102,12 @@ const description = `Professional concrete services in ${contractor.service_area
         </p>
       </div>
 
-      <InlineChat client:visible slug={contractor.slug} businessName={contractor.business_name} />
+      <InlineChat client:visible slug={contractor.slug} businessName={contractor.business_name} badgeText={hasVoiceAI ? 'AI assistant online — responds instantly' : 'Online estimator — get pricing now'} />
 
       <!-- Prefer to call? -->
       <div class="mt-8 scroll-reveal">
         <p class="text-white/30 text-[15px]">Prefer to talk?
-          <a href={`tel:${callNumber}`} class="text-[#E87C3E] hover:text-[#E87C3E]/80 font-semibold transition-colors">{hasVoiceAI ? 'Call — AI picks up instantly.' : `Call ${contractor.phone}`}</a>
+          <a href={`tel:${callNumber}`} class="text-[var(--accent)] hover:text-[var(--accent)]/80 font-semibold transition-colors">{hasVoiceAI ? 'Call — AI picks up instantly.' : `Call ${contractor.phone}`}</a>
         </p>
       </div>
     </div>
@@ -118,7 +120,7 @@ const description = `Professional concrete services in ${contractor.service_area
     <div class="absolute inset-0 bg-[#0a0e17]"></div>
     <div class="relative z-10 max-w-5xl mx-auto px-6">
       <div class="text-center mb-14 scroll-reveal">
-        <p class="text-[13px] uppercase tracking-[0.15em] text-[#E87C3E] font-semibold mb-3">Based on 750+ Reviews</p>
+        <p class="text-[13px] uppercase tracking-[0.15em] font-semibold mb-3" style={`color: ${accent}`}>Based on {stats.projects}+ Reviews</p>
         <h2 class="font-heading font-extrabold text-3xl md:text-4xl text-white">
           We already know your concerns.
         </h2>
@@ -169,7 +171,7 @@ const description = `Professional concrete services in ${contractor.service_area
     <div class="relative z-10 max-w-3xl mx-auto px-6 text-center scroll-reveal">
       <p class="text-white/50 text-lg mb-6">{pc?.midCtaText || 'Got questions about your project? Get real pricing — no sales pitch.'}</p>
       <div class="flex flex-col sm:flex-row gap-4 justify-center">
-        <a href="#quoter" class="bg-[#E87C3E] text-white px-8 py-4 rounded-2xl font-bold text-lg hover:opacity-90 transition-opacity">
+        <a href="#quoter" class="bg-[var(--accent)] text-white px-8 py-4 rounded-2xl font-bold text-lg hover:opacity-90 transition-opacity">
           Chat With Us
         </a>
         <a href={`tel:${callNumber}`} class="border border-white/20 text-white px-8 py-4 rounded-2xl font-semibold text-lg hover:bg-white/10 transition-all">
@@ -180,31 +182,27 @@ const description = `Professional concrete services in ${contractor.service_area
   </section>
 
   <!-- ============================================
-       5. BEFORE/AFTER — Visual proof (moved here: after trust, before process)
+       5. RECENT PROJECTS — Real work gallery
        ============================================ -->
-  <section id="transformation" class="ba-container">
-    <div class="ba-sticky" id="ba-section">
-      <div class="absolute inset-0 bg-[#0a0e17]"></div>
-      <div class="relative z-10 w-full max-w-5xl mx-auto px-6">
-        <div class="text-center mb-8">
-          <p class="text-[13px] uppercase tracking-[0.15em] text-[#E87C3E] font-semibold mb-3 scroll-reveal">Real Results</p>
-          <h2 class="font-heading font-extrabold text-3xl md:text-5xl text-white scroll-reveal">
-            Watch it transform.
-          </h2>
-          <p class="text-white/40 text-[15px] mt-3 scroll-reveal">Scroll to reveal the after</p>
-        </div>
-        <div class="relative aspect-[16/9] rounded-3xl overflow-hidden shadow-2xl shadow-black/50">
-          <img src={beforeAfterPairs[0].before} alt="Before" class="absolute inset-0 w-full h-full object-cover" id="ba-before" />
-          <img src={beforeAfterPairs[0].after} alt="After" class="absolute inset-0 w-full h-full object-cover ba-after-clip" id="ba-after" />
-          <div class="absolute top-6 left-6 bg-black/60 backdrop-blur-sm text-white text-[13px] font-bold uppercase tracking-widest px-4 py-2 rounded-full">Before</div>
-          <div class="absolute top-6 right-6 bg-[#E87C3E]/90 backdrop-blur-sm text-white text-[13px] font-bold uppercase tracking-widest px-4 py-2 rounded-full opacity-0 transition-opacity" id="ba-label-after">After</div>
-          <div class="absolute top-0 bottom-0 w-[3px] bg-white/80 shadow-[0_0_12px_rgba(255,255,255,0.4)]" id="ba-divider" style="left: 0%;">
-            <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-12 h-12 bg-white rounded-full shadow-xl flex items-center justify-center">
-              <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#1E3D5F" stroke-width="2.5"><path d="M18 8L22 12L18 16"/><path d="M6 8L2 12L6 16"/></svg>
+  <section class="py-20 relative">
+    <div class="absolute inset-0 bg-[#0a0e17]"></div>
+    <div class="relative z-10 max-w-5xl mx-auto px-6">
+      <div class="text-center mb-10 scroll-reveal">
+        <p class="text-[13px] uppercase tracking-[0.15em] font-semibold mb-3" style={`color: ${accent}`}>Real Results</p>
+        <h2 class="font-heading font-extrabold text-3xl md:text-4xl text-white">Recent projects in {contractor.service_areas[0]}.</h2>
+      </div>
+      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 scroll-stagger">
+        {galleryProjects.slice(0, 6).map((p: any) => (
+          <div class="rounded-2xl overflow-hidden shadow-xl shadow-black/30 group">
+            <div class="aspect-[4/3] overflow-hidden">
+              <img src={p.image} alt={p.title} loading="lazy" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
+            </div>
+            <div class="bg-white/5 px-4 py-3">
+              <p class="text-white text-[15px] font-semibold">{p.title}</p>
+              <p class="text-white/40 text-[13px]">{p.location}</p>
             </div>
           </div>
-        </div>
-        <p class="text-center text-white/30 text-[15px] mt-4">{beforeAfterPairs[0].title} &middot; {beforeAfterPairs[0].location} &middot; $4,200 &middot; 3 days</p>
+        ))}
       </div>
     </div>
   </section>
@@ -217,11 +215,11 @@ const description = `Professional concrete services in ${contractor.service_area
       <div class="absolute inset-0 bg-gradient-to-b from-[#0a0e17] to-[#0f1623]"></div>
       <div class="relative z-10 w-full max-w-6xl mx-auto px-6">
         <div class="text-center mb-6">
-          <p class="text-[13px] uppercase tracking-[0.15em] text-[#E87C3E] font-semibold mb-3">Our Process</p>
+          <p class="text-[13px] uppercase tracking-[0.15em] text-[var(--accent)] font-semibold mb-3">Our Process</p>
           <h2 class="font-heading font-extrabold text-3xl md:text-5xl text-white">From call to <span class="gradient-text">done.</span></h2>
         </div>
         <div class="flex justify-center gap-3 mb-10" id="step-dots">
-          <div class="step-dot w-3 h-3 rounded-full bg-[#E87C3E] transition-all"></div>
+          <div class="step-dot w-3 h-3 rounded-full bg-[var(--accent)] transition-all"></div>
           <div class="step-dot w-3 h-3 rounded-full bg-white/20 transition-all"></div>
           <div class="step-dot w-3 h-3 rounded-full bg-white/20 transition-all"></div>
         </div>
@@ -234,7 +232,7 @@ const description = `Professional concrete services in ${contractor.service_area
             <div class={`process-step-card ${i === 0 ? 'active' : ''}`} data-step={i}>
               <div class="grid md:grid-cols-2 gap-8 items-center max-w-4xl mx-auto">
                 <div class="order-2 md:order-1">
-                  <span class="text-[#E87C3E] font-heading font-extrabold text-6xl opacity-20">{step.num}</span>
+                  <span class="text-[var(--accent)] font-heading font-extrabold text-6xl opacity-20">{step.num}</span>
                   <h3 class="font-heading font-bold text-2xl md:text-3xl text-white mt-2 mb-4">{step.title}</h3>
                   <p class="text-white/60 text-[17px] leading-relaxed">{step.desc}</p>
                 </div>
@@ -264,7 +262,7 @@ const description = `Professional concrete services in ${contractor.service_area
           </div>
         </div>
         <div class="scroll-reveal">
-          <p class="text-[13px] uppercase tracking-[0.15em] text-[#E87C3E] font-semibold mb-3">Meet Your Contractor</p>
+          <p class="text-[13px] uppercase tracking-[0.15em] text-[var(--accent)] font-semibold mb-3">Meet Your Contractor</p>
           <h2 class="font-heading font-extrabold text-2xl md:text-3xl text-white mb-4">
             {pc?.meetHeadline || `${contractor.owner_name}. ${stats.years} years. Same phone number.`}
           </h2>
@@ -306,17 +304,17 @@ const description = `Professional concrete services in ${contractor.service_area
       </div>
 
       <div class="text-center mb-12 scroll-reveal">
-        <p class="text-[13px] uppercase tracking-[0.15em] text-[#E87C3E] font-semibold mb-3">Real Words, Real Homeowners</p>
+        <p class="text-[13px] uppercase tracking-[0.15em] text-[var(--accent)] font-semibold mb-3">Real Words, Real Homeowners</p>
         <h2 class="font-heading font-extrabold text-3xl md:text-4xl text-white">Don't take our word for it.</h2>
       </div>
 
       <div class="grid md:grid-cols-3 gap-6 scroll-stagger">
         {reviews.map((review) => (
           <div class="glass-card p-8 relative group hover:bg-white/10 transition-colors">
-            <div class="absolute top-4 right-6 text-[#E87C3E]/30 text-5xl font-serif leading-none">&ldquo;</div>
+            <div class="absolute top-4 right-6 text-[var(--accent)]/30 text-5xl font-serif leading-none">&ldquo;</div>
             <p class="text-white/80 text-[17px] italic leading-relaxed mb-5">&ldquo;{review.text}&rdquo;</p>
             <div class="flex items-center gap-3">
-              <div class="w-10 h-10 rounded-full bg-[#E87C3E]/20 flex items-center justify-center text-[#E87C3E] font-bold text-[15px]">{review.name.charAt(0)}</div>
+              <div class="w-10 h-10 rounded-full bg-[var(--accent)]/20 flex items-center justify-center text-[var(--accent)] font-bold text-[15px]">{review.name.charAt(0)}</div>
               <div>
                 <p class="text-white text-[15px] font-semibold">{review.name}</p>
                 <p class="text-white/40 text-[13px]">{review.location} &middot; {review.service}</p>
@@ -328,8 +326,8 @@ const description = `Professional concrete services in ${contractor.service_area
 
       <!-- V2 NEW: Google Reviews Link -->
       <div class="text-center mt-10 scroll-reveal">
-        <a href={contractor.google_reviews_link} target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 text-[#E87C3E] hover:text-[#E87C3E]/80 transition-colors text-[15px] font-semibold">
-          Read all 750+ reviews on Google
+        <a href={contractor.google_reviews_link} target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 text-[var(--accent)] hover:text-[var(--accent)]/80 transition-colors text-[15px] font-semibold">
+          Read all {stats.projects}+ reviews on Google
           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17l9.2-9.2M17 17V7H7"/></svg>
         </a>
       </div>
@@ -376,7 +374,7 @@ const description = `Professional concrete services in ${contractor.service_area
       </div>
 
       <div class="flex flex-col sm:flex-row gap-5 justify-center scroll-stagger">
-        <a href="#quoter" class="bg-[#E87C3E] text-white px-10 py-5 rounded-2xl font-bold text-lg shadow-lg shadow-[#E87C3E]/20 hover:shadow-xl hover:shadow-[#E87C3E]/30 hover:scale-[1.03] transition-all text-center">
+        <a href="#quoter" class="bg-[var(--accent)] text-white px-10 py-5 rounded-2xl font-bold text-lg shadow-lg shadow-[var(--accent)]/20 hover:shadow-xl hover:shadow-[var(--accent)]/30 hover:scale-[1.03] transition-all text-center">
           Get Your Estimate Online
         </a>
         <a href={`tel:${callNumber}`} class="border border-white/20 text-white px-10 py-5 rounded-2xl font-semibold text-lg backdrop-blur-sm hover:bg-white/10 transition-all text-center">
@@ -399,10 +397,12 @@ const description = `Professional concrete services in ${contractor.service_area
 
   <MobileCTA phoneRaw={callNumber} contactHref="#quoter" />
 
-  <!-- V2: CSS overrides -->
+  <!-- V2: CSS overrides — accent color is dynamic per contractor -->
   <style is:global define:vars={{ accent }}>
     .process-scroll { height: 200vh !important; }
     .gradient-text { background: linear-gradient(135deg, var(--accent), #fff) !important; -webkit-background-clip: text !important; -webkit-text-fill-color: transparent !important; }
+    .pulse-cta { animation: pulse-accent 2s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
+    @keyframes pulse-accent { 0%, 100% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--accent) 40%, transparent); } 50% { box-shadow: 0 0 20px 4px color-mix(in srgb, var(--accent) 20%, transparent); } }
   </style>
 
   <!-- SCROLL ENGINE -->
@@ -435,7 +435,7 @@ const description = `Professional concrete services in ${contractor.service_area
         const stepIndex = Math.min(2, Math.floor(progress * 3));
         processCards.forEach((card, i) => card.classList.toggle('active', i === stepIndex));
         stepDots.forEach((dot, i) => {
-          (dot as HTMLElement).style.background = i === stepIndex ? '#E87C3E' : 'rgba(255,255,255,0.2)';
+          (dot as HTMLElement).style.background = i === stepIndex ? getComputedStyle(document.documentElement).getPropertyValue('--accent').trim() || '#E87C3E' : 'rgba(255,255,255,0.2)';
           (dot as HTMLElement).style.width = i === stepIndex ? '2rem' : '0.75rem';
         });
       }

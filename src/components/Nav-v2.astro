@@ -6,25 +6,33 @@ interface Props {
   phoneRaw: string;
   voicePhoneRaw?: string;
   activePage?: 'home' | 'services' | 'gallery' | 'contact';
+  logoUrl?: string;
+  accent?: string;
 }
 
-const { slug, businessName, phone, phoneRaw, voicePhoneRaw, activePage = 'home' } = Astro.props;
+const { slug, businessName, phone, phoneRaw, voicePhoneRaw, activePage = 'home', logoUrl, accent = '#E87C3E' } = Astro.props;
 const callNumber = voicePhoneRaw || phoneRaw;
 const base = `/v2/${slug}`;
 ---
 
 <nav class="fixed top-0 left-0 right-0 z-50 transition-all duration-300" id="main-nav">
   <div class="max-w-[1200px] mx-auto px-6 h-20 flex items-center justify-between">
-    <a href={base} class="font-heading font-bold text-xl transition-colors" id="nav-logo">{businessName}</a>
+    <a href={base} class="transition-colors flex items-center gap-2" id="nav-logo">
+      {logoUrl ? (
+        <img src={logoUrl} alt={businessName} class="h-10 max-w-[180px] object-contain" />
+      ) : (
+        <span class="font-heading font-bold text-xl">{businessName}</span>
+      )}
+    </a>
     <div class="hidden md:flex items-center gap-6">
       <a href={`${base}/services`} class={`nav-link text-[15px] transition-colors ${activePage === 'services' ? 'font-semibold' : ''}`}>Services</a>
       <a href={`${base}/gallery`} class={`nav-link text-[15px] transition-colors ${activePage === 'gallery' ? 'font-semibold' : ''}`}>Our Work</a>
       <a href={activePage === 'home' ? '#reviews' : `${base}#reviews`} class="nav-link text-[15px] transition-colors">Reviews</a>
       <a href={`tel:${callNumber}`} class="nav-link text-[15px] transition-colors">{phone}</a>
-      <a href="#quoter" class="bg-[#E87C3E] text-white px-5 py-2.5 rounded-xl text-[15px] font-semibold hover:opacity-90 transition-opacity">Free Estimate</a>
+      <a href="#quoter" style={`background-color: ${accent}`} class=" text-white px-5 py-2.5 rounded-xl text-[15px] font-semibold hover:opacity-90 transition-opacity">Free Estimate</a>
     </div>
     <div class="flex items-center gap-3 md:hidden">
-      <a href={`tel:${callNumber}`} class="bg-[#E87C3E] text-white p-2.5 rounded-xl">
+      <a href={`tel:${callNumber}`} style={`background-color: ${accent}`} class=" text-white p-2.5 rounded-xl">
         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
       </a>
       <button id="hamburger-btn" class="p-2" aria-label="Open menu">
