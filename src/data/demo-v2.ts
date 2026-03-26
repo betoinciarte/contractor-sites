@@ -16,6 +16,7 @@ export const contractor = {
   business_hours: 'Mon–Sat: 7am – 6pm',
   voicePhone: '(214) 555-0100',
   voicePhoneRaw: '2145550100',
+  hasVoiceAI: true,
 };
 
 const IMG = '/images/concrete';

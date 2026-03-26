@@ -4,19 +4,27 @@ import Nav from '../../../components/Nav-v2.astro';
 import Footer from '../../../components/Footer-v2.astro';
 import MobileCTA from '../../../components/MobileCTA.astro';
 import InlineChat from '../../../components/InlineChat-v2';
-import { contractor, stats } from '../../../data/demo-v2';
+import { getContractor } from '../../../data/contractors';
+
+const { slug } = Astro.params;
+const data = getContractor(slug!);
+if (!data) return new Response(null, { status: 404, statusText: 'Contractor not found' });
+
+const { contractor, stats } = data;
+const callNumber = contractor.voicePhoneRaw || contractor.phoneRaw;
+const hasVoiceAI = contractor.hasVoiceAI !== false;
 
 const title = `Get Your Free Estimate — ${contractor.business_name}`;
-const description = `Get a free concrete estimate in ${contractor.service_areas[0]}. Call ${contractor.phone} or fill out our form. Response in 30 minutes.`;
+const description = `Get a free concrete estimate in ${contractor.service_areas[0]}. Call ${contractor.phone}. Response in 30 minutes.`;
 ---
 
-<BaseLayout title={title} description={description} dark>
+<BaseLayout title={title} description={description} dark noIndex={contractor.noindex}>
   <Nav
     slug={contractor.slug}
     businessName={contractor.business_name}
     phone={contractor.phone}
     phoneRaw={contractor.phoneRaw}
-    voicePhoneRaw={contractor.voicePhoneRaw}
+    voicePhoneRaw={callNumber}
     activePage="contact"
   />
 
@@ -44,7 +52,7 @@ const description = `Get a free concrete estimate in ${contractor.service_areas[
       <InlineChat client:visible slug={contractor.slug} businessName={contractor.business_name} />
       <div class="mt-8">
         <p class="text-white/30 text-[15px]">Prefer to talk?
-          <a href={`tel:${contractor.voicePhoneRaw}`} class="text-[#E87C3E] hover:text-[#E87C3E]/80 font-semibold transition-colors">Call — AI picks up instantly.</a>
+          <a href={`tel:${callNumber}`} class="text-[#E87C3E] hover:text-[#E87C3E]/80 font-semibold transition-colors">{hasVoiceAI ? 'Call — AI picks up instantly.' : `Call ${contractor.phone}`}</a>
         </p>
       </div>
     </div>
@@ -57,7 +65,7 @@ const description = `Get a free concrete estimate in ${contractor.service_areas[
       <div class="grid sm:grid-cols-3 gap-6">
         <!-- Call -->
         <div class="glass-card p-6 text-center">
-          <a href={`tel:${contractor.voicePhoneRaw}`} class="font-heading font-bold text-xl text-white hover:text-[#E87C3E] transition-colors block mb-2">
+          <a href={`tel:${callNumber}`} class="font-heading font-bold text-xl text-white hover:text-[#E87C3E] transition-colors block mb-2">
             {contractor.phone}
           </a>
           <p class="text-white/40 text-[13px]">AI answers instantly. 24/7.</p>
@@ -95,13 +103,13 @@ const description = `Get a free concrete estimate in ${contractor.service_areas[
     businessName={contractor.business_name}
     phone={contractor.phone}
     phoneRaw={contractor.phoneRaw}
-    voicePhoneRaw={contractor.voicePhoneRaw}
+    voicePhoneRaw={callNumber}
     licenseNumber={contractor.license_number}
     serviceAreas={contractor.service_areas}
     businessHours={contractor.business_hours}
   />
 
-  <MobileCTA phoneRaw={contractor.voicePhoneRaw} contactHref="#quoter" />
+  <MobileCTA phoneRaw={callNumber} contactHref="#quoter" />
 
   <script>
     const obs = new IntersectionObserver((entries) => {

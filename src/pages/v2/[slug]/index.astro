@@ -4,13 +4,21 @@ import Nav from '../../../components/Nav-v2.astro';
 import Footer from '../../../components/Footer-v2.astro';
 import MobileCTA from '../../../components/MobileCTA.astro';
 import InlineChat from '../../../components/InlineChat-v2';
-import { contractor, services, reviews, stats, statCards, heroImage, crewImage, processImages, beforeAfterPairs, badges } from '../../../data/demo-v2';
+import { getContractor } from '../../../data/contractors';
+
+const { slug } = Astro.params;
+const data = getContractor(slug!);
+if (!data) return new Response(null, { status: 404, statusText: 'Contractor not found' });
+
+const { contractor, services, reviews, stats, statCards, heroImage, crewImage, processImages, beforeAfterPairs, badges } = data;
+const callNumber = contractor.voicePhoneRaw || contractor.phoneRaw;
+const hasVoiceAI = contractor.hasVoiceAI !== false;
 
 const title = `${contractor.business_name} — Concrete in ${contractor.service_areas[0]}`;
 const description = `Professional concrete services in ${contractor.service_areas.slice(0,3).join(', ')}. Licensed, insured, free estimates.`;
 ---
 
-<BaseLayout title={title} description={description} dark hideChat>
+<BaseLayout title={title} description={description} dark hideChat noIndex={contractor.noindex}>
   <div class="scroll-progress" id="scroll-progress"></div>
 
   <Nav
@@ -18,7 +26,7 @@ const description = `Professional concrete services in ${contractor.service_area
     businessName={contractor.business_name}
     phone={contractor.phone}
     phoneRaw={contractor.phoneRaw}
-    voicePhoneRaw={contractor.voicePhoneRaw}
+    voicePhoneRaw={callNumber}
     activePage="home"
   />
 
@@ -52,8 +60,8 @@ const description = `Professional concrete services in ${contractor.service_area
         <a href="#quoter" class="bg-[#E87C3E] text-white px-10 py-5 rounded-2xl font-bold text-lg shadow-lg shadow-[#E87C3E]/20 hover:shadow-xl hover:shadow-[#E87C3E]/30 hover:scale-[1.03] transition-all pulse-cta">
           Get Your Estimate Online
         </a>
-        <a href={`tel:${contractor.voicePhoneRaw}`} class="border border-white/20 text-white px-10 py-5 rounded-2xl font-semibold text-lg backdrop-blur-sm hover:bg-white/10 transition-all">
-          Call — AI Picks Up Instantly
+        <a href={`tel:${callNumber}`} class="border border-white/20 text-white px-10 py-5 rounded-2xl font-semibold text-lg backdrop-blur-sm hover:bg-white/10 transition-all">
+          {hasVoiceAI ? 'Call — AI Picks Up Instantly' : `Call ${contractor.phone}`}
         </a>
       </div>
     </div>
@@ -98,7 +106,7 @@ const description = `Professional concrete services in ${contractor.service_area
       <!-- Prefer to call? -->
       <div class="mt-8 scroll-reveal">
         <p class="text-white/30 text-[15px]">Prefer to talk?
-          <a href={`tel:${contractor.voicePhoneRaw}`} class="text-[#E87C3E] hover:text-[#E87C3E]/80 font-semibold transition-colors">Call — AI picks up instantly.</a>
+          <a href={`tel:${callNumber}`} class="text-[#E87C3E] hover:text-[#E87C3E]/80 font-semibold transition-colors">{hasVoiceAI ? 'Call — AI picks up instantly.' : `Call ${contractor.phone}`}</a>
         </p>
       </div>
     </div>
@@ -160,8 +168,8 @@ const description = `Professional concrete services in ${contractor.service_area
         <a href="#quoter" class="bg-[#E87C3E] text-white px-8 py-4 rounded-2xl font-bold text-lg hover:opacity-90 transition-opacity">
           Chat With Us
         </a>
-        <a href={`tel:${contractor.voicePhoneRaw}`} class="border border-white/20 text-white px-8 py-4 rounded-2xl font-semibold text-lg hover:bg-white/10 transition-all">
-          Call — AI Picks Up
+        <a href={`tel:${callNumber}`} class="border border-white/20 text-white px-8 py-4 rounded-2xl font-semibold text-lg hover:bg-white/10 transition-all">
+          {hasVoiceAI ? 'Call — AI Picks Up' : `Call ${contractor.phone}`}
         </a>
       </div>
     </div>
@@ -366,8 +374,8 @@ const description = `Professional concrete services in ${contractor.service_area
         <a href="#quoter" class="bg-[#E87C3E] text-white px-10 py-5 rounded-2xl font-bold text-lg shadow-lg shadow-[#E87C3E]/20 hover:shadow-xl hover:shadow-[#E87C3E]/30 hover:scale-[1.03] transition-all text-center">
           Get Your Estimate Online
         </a>
-        <a href={`tel:${contractor.voicePhoneRaw}`} class="border border-white/20 text-white px-10 py-5 rounded-2xl font-semibold text-lg backdrop-blur-sm hover:bg-white/10 transition-all text-center">
-          Call — AI Picks Up Instantly
+        <a href={`tel:${callNumber}`} class="border border-white/20 text-white px-10 py-5 rounded-2xl font-semibold text-lg backdrop-blur-sm hover:bg-white/10 transition-all text-center">
+          {hasVoiceAI ? 'Call — AI Picks Up Instantly' : `Call ${contractor.phone}`}
         </a>
       </div>
     </div>
@@ -378,13 +386,13 @@ const description = `Professional concrete services in ${contractor.service_area
     businessName={contractor.business_name}
     phone={contractor.phone}
     phoneRaw={contractor.phoneRaw}
-    voicePhoneRaw={contractor.voicePhoneRaw}
+    voicePhoneRaw={callNumber}
     licenseNumber={contractor.license_number}
     serviceAreas={contractor.service_areas}
     businessHours={contractor.business_hours}
   />
 
-  <MobileCTA phoneRaw={contractor.voicePhoneRaw} contactHref="#quoter" />
+  <MobileCTA phoneRaw={callNumber} contactHref="#quoter" />
 
   <!-- V2: Override process scroll height (300vh → 200vh for less mobile scroll fatigue) -->
   <style is:global>

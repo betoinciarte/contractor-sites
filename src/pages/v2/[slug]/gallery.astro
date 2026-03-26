@@ -6,19 +6,26 @@ import MobileCTA from '../../../components/MobileCTA.astro';
 import GalleryGrid from '../../../components/GalleryGrid';
 import BeforeAfterSlider from '../../../components/BeforeAfterSlider';
 import InlineChat from '../../../components/InlineChat-v2';
-import { contractor, galleryProjects, beforeAfterPairs } from '../../../data/demo-v2';
+import { getContractor } from '../../../data/contractors';
+
+const { slug } = Astro.params;
+const data = getContractor(slug!);
+if (!data) return new Response(null, { status: 404, statusText: 'Contractor not found' });
+
+const { contractor, galleryProjects, beforeAfterPairs } = data;
+const callNumber = contractor.voicePhoneRaw || contractor.phoneRaw;
 
 const title = `Our Work — ${contractor.business_name}`;
-const description = `Browse our portfolio of concrete projects in ${contractor.service_areas.slice(0,3).join(', ')}. Driveways, patios, foundations, and more.`;
+const description = `Browse our portfolio of concrete projects in ${contractor.service_areas.slice(0,3).join(', ')}.`;
 ---
 
-<BaseLayout title={title} description={description} dark>
+<BaseLayout title={title} description={description} dark noIndex={contractor.noindex}>
   <Nav
     slug={contractor.slug}
     businessName={contractor.business_name}
     phone={contractor.phone}
     phoneRaw={contractor.phoneRaw}
-    voicePhoneRaw={contractor.voicePhoneRaw}
+    voicePhoneRaw={callNumber}
     activePage="gallery"
   />
 
@@ -70,13 +77,13 @@ const description = `Browse our portfolio of concrete projects in ${contractor.s
     businessName={contractor.business_name}
     phone={contractor.phone}
     phoneRaw={contractor.phoneRaw}
-    voicePhoneRaw={contractor.voicePhoneRaw}
+    voicePhoneRaw={callNumber}
     licenseNumber={contractor.license_number}
     serviceAreas={contractor.service_areas}
     businessHours={contractor.business_hours}
   />
 
-  <MobileCTA phoneRaw={contractor.voicePhoneRaw} contactHref="#quoter" />
+  <MobileCTA phoneRaw={callNumber} contactHref="#quoter" />
 
   <script>
     const obs = new IntersectionObserver((entries) => {
