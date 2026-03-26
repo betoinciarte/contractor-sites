@@ -3,7 +3,7 @@ import BaseLayout from '../../../layouts/BaseLayout.astro';
 import Nav from '../../../components/Nav-v2.astro';
 import Footer from '../../../components/Footer-v2.astro';
 import MobileCTA from '../../../components/MobileCTA.astro';
-import InlineChat from '../../../components/InlineChat';
+import InlineChat from '../../../components/InlineChat-v2';
 import { contractor, stats } from '../../../data/demo-v2';
 
 const title = `Get Your Free Estimate — ${contractor.business_name}`;
@@ -44,7 +44,7 @@ const description = `Get a free concrete estimate in ${contractor.service_areas[
       <InlineChat client:visible slug={contractor.slug} businessName={contractor.business_name} />
       <div class="mt-8">
         <p class="text-white/30 text-[15px]">Prefer to talk?
-          <a href={`tel:${contractor.voicePhoneRaw}`} class="text-[#E87C3E] hover:text-[#E87C3E]/80 font-semibold transition-colors">Call us — we pick up instantly.</a>
+          <a href={`tel:${contractor.voicePhoneRaw}`} class="text-[#E87C3E] hover:text-[#E87C3E]/80 font-semibold transition-colors">Call — AI picks up instantly.</a>
         </p>
       </div>
     </div>
