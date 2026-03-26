@@ -1,0 +1,112 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import Nav from '../../../components/Nav-v2.astro';
+import Footer from '../../../components/Footer-v2.astro';
+import MobileCTA from '../../../components/MobileCTA.astro';
+import InlineChat from '../../../components/InlineChat';
+import { contractor, stats } from '../../../data/demo-v2';
+
+const title = `Get Your Free Estimate — ${contractor.business_name}`;
+const description = `Get a free concrete estimate in ${contractor.service_areas[0]}. Call ${contractor.phone} or fill out our form. Response in 30 minutes.`;
+---
+
+<BaseLayout title={title} description={description} dark>
+  <Nav
+    slug={contractor.slug}
+    businessName={contractor.business_name}
+    phone={contractor.phone}
+    phoneRaw={contractor.phoneRaw}
+    voicePhoneRaw={contractor.voicePhoneRaw}
+    activePage="contact"
+  />
+
+  <!-- Page Header -->
+  <section class="pt-32 pb-12 relative">
+    <div class="absolute inset-0 bg-gradient-to-b from-[#0a0e17] to-[#0f1623]"></div>
+    <div class="relative z-10 max-w-[1200px] mx-auto px-6 text-center">
+      <p class="text-[13px] uppercase tracking-[0.15em] text-[#E87C3E] font-semibold mb-3">Free Estimate — Zero Obligation</p>
+      <h1 class="font-heading font-extrabold text-4xl md:text-[48px] leading-[1.1] text-white mb-4">See What Your Project Will Cost</h1>
+      <p class="text-white/50 text-lg max-w-xl mx-auto">
+        Three ways to reach us. All take less than 60 seconds. We respond within 30 minutes — and if we can't help, we'll tell you upfront.
+      </p>
+    </div>
+  </section>
+
+  <!-- AI Quoter (PRIMARY) -->
+  <section id="quoter" class="py-20 relative">
+    <div class="absolute inset-0 bg-[#0f1623]"></div>
+    <div class="relative z-10 max-w-3xl mx-auto px-6 text-center">
+      <div class="scroll-reveal">
+        <p class="text-[13px] uppercase tracking-[0.15em] text-[#E87C3E] font-semibold mb-3">Instant AI Estimate</p>
+        <h2 class="font-heading font-bold text-2xl md:text-3xl text-white mb-3">Describe your project. Get a price.</h2>
+        <p class="text-white/40 text-[15px] mb-8">Trained on 750+ real projects in {contractor.service_areas[0]}. Your info goes directly to {contractor.owner_name} — no middlemen.</p>
+      </div>
+      <InlineChat client:visible slug={contractor.slug} businessName={contractor.business_name} />
+      <div class="mt-8">
+        <p class="text-white/30 text-[15px]">Prefer to talk?
+          <a href={`tel:${contractor.voicePhoneRaw}`} class="text-[#E87C3E] hover:text-[#E87C3E]/80 font-semibold transition-colors">Call us — we pick up instantly.</a>
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Info Section -->
+  <section class="py-16 relative">
+    <div class="absolute inset-0 bg-[#0a0e17]"></div>
+    <div class="relative z-10 max-w-3xl mx-auto px-6">
+      <div class="grid sm:grid-cols-3 gap-6">
+        <!-- Call -->
+        <div class="glass-card p-6 text-center">
+          <a href={`tel:${contractor.voicePhoneRaw}`} class="font-heading font-bold text-xl text-white hover:text-[#E87C3E] transition-colors block mb-2">
+            {contractor.phone}
+          </a>
+          <p class="text-white/40 text-[13px]">AI answers instantly. 24/7.</p>
+        </div>
+
+        <!-- Hours -->
+        <div class="glass-card p-6 text-center">
+          <p class="font-heading font-bold text-lg text-white mb-1">{contractor.business_hours}</p>
+          <p class="text-white/40 text-[13px]">Business Hours</p>
+        </div>
+
+        <!-- Rating -->
+        <div class="glass-card p-6 text-center">
+          <div class="flex items-center justify-center gap-1 mb-1">
+            <span class="text-[#F59E0B] text-lg">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
+          </div>
+          <p class="font-heading font-bold text-lg text-white">{stats.rating} Rating</p>
+          <p class="text-white/40 text-[13px]">Licensed &amp; Insured</p>
+        </div>
+      </div>
+
+      <div class="mt-8 text-center">
+        <p class="text-[13px] uppercase tracking-[0.05em] text-white/30 font-semibold mb-3">Service Areas</p>
+        <div class="flex flex-wrap gap-2 justify-center">
+          {contractor.service_areas.map((area) => (
+            <span class="text-[13px] text-white/60 bg-white/5 px-3 py-1.5 rounded-full">{area}</span>
+          ))}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <Footer
+    slug={contractor.slug}
+    businessName={contractor.business_name}
+    phone={contractor.phone}
+    phoneRaw={contractor.phoneRaw}
+    voicePhoneRaw={contractor.voicePhoneRaw}
+    licenseNumber={contractor.license_number}
+    serviceAreas={contractor.service_areas}
+    businessHours={contractor.business_hours}
+  />
+
+  <MobileCTA phoneRaw={contractor.voicePhoneRaw} contactHref="#quoter" />
+
+  <script>
+    const obs = new IntersectionObserver((entries) => {
+      entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+    }, { threshold: 0.15 });
+    document.querySelectorAll('.scroll-reveal').forEach(el => obs.observe(el));
+  </script>
+</BaseLayout>

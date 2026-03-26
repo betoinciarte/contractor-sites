@@ -1,0 +1,52 @@
+---
+interface Props {
+  slug: string;
+  businessName: string;
+  phone: string;
+  phoneRaw: string;
+  voicePhoneRaw?: string;
+  licenseNumber: string;
+  serviceAreas: string[];
+  businessHours: string;
+}
+
+const { slug, businessName, phone, phoneRaw, voicePhoneRaw, licenseNumber, serviceAreas, businessHours } = Astro.props;
+const callNumber = voicePhoneRaw || phoneRaw;
+const base = `/v2/${slug}`;
+---
+
+<footer class="bg-[#111827] py-12">
+  <div class="max-w-[1200px] mx-auto px-6">
+    <div class="grid md:grid-cols-3 gap-6 md:gap-8">
+      <div>
+        <h3 class="font-heading font-bold text-xl text-white mb-2">{businessName}</h3>
+        <p class="text-white/50 text-[15px] mb-4">Licensed &amp; Insured &middot; {licenseNumber}</p>
+        <a href={`tel:${callNumber}`} class="text-white text-xl font-bold hover:text-[#E87C3E] transition-colors">
+          {phone}
+        </a>
+      </div>
+      <div>
+        <h4 class="font-heading font-semibold text-white mb-3">Quick Links</h4>
+        <div class="space-y-2">
+          <a href={base} class="block text-white/60 hover:text-white text-[15px] transition-colors">Home</a>
+          <a href={`${base}/services`} class="block text-white/60 hover:text-white text-[15px] transition-colors">Services</a>
+          <a href={`${base}/gallery`} class="block text-white/60 hover:text-white text-[15px] transition-colors">Our Work</a>
+          <a href={`${base}/contact`} class="block text-white/60 hover:text-white text-[15px] transition-colors">Contact</a>
+        </div>
+      </div>
+      <div>
+        <h4 class="font-heading font-semibold text-white mb-3">Service Areas</h4>
+        <div class="flex flex-wrap gap-2 mb-4">
+          {serviceAreas.map((area) => (
+            <span class="text-[13px] text-white/60 bg-white/5 px-3 py-1 rounded-full">{area}</span>
+          ))}
+        </div>
+        <p class="text-white/40 text-[15px]">{businessHours}</p>
+      </div>
+    </div>
+    <div class="border-t border-white/10 mt-8 pt-6 flex flex-col md:flex-row justify-between items-center gap-2">
+      <p class="text-white/40 text-[13px]">&copy; 2026 {businessName}. All rights reserved.</p>
+      <p class="text-white/30 text-[13px]">Powered by SPC</p>
+    </div>
+  </div>
+</footer>

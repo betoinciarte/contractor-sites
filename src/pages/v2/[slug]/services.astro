@@ -1,0 +1,117 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import Nav from '../../../components/Nav-v2.astro';
+import Footer from '../../../components/Footer-v2.astro';
+import MobileCTA from '../../../components/MobileCTA.astro';
+import InlineChat from '../../../components/InlineChat';
+import { contractor, services } from '../../../data/demo-v2';
+
+const title = `Our Services — ${contractor.business_name}`;
+const description = `Professional concrete services: driveways, patios, foundations, stamped concrete. Serving ${contractor.service_areas.slice(0,3).join(', ')}.`;
+---
+
+<BaseLayout title={title} description={description} dark>
+  <Nav
+    slug={contractor.slug}
+    businessName={contractor.business_name}
+    phone={contractor.phone}
+    phoneRaw={contractor.phoneRaw}
+    voicePhoneRaw={contractor.voicePhoneRaw}
+    activePage="services"
+  />
+
+  <!-- Page Header -->
+  <section class="pt-32 pb-16 relative">
+    <div class="absolute inset-0 bg-gradient-to-b from-[#0a0e17] to-[#0f1623]"></div>
+    <div class="relative z-10 max-w-[1200px] mx-auto px-6 text-center">
+      <p class="text-[13px] uppercase tracking-[0.15em] text-[#E87C3E] font-semibold mb-3">Concrete Services in {contractor.service_areas[0]}</p>
+      <h1 class="font-heading font-extrabold text-4xl md:text-[48px] leading-[1.1] text-white mb-4">Fixed Pricing. Real Warranty. No Surprises.</h1>
+      <p class="text-white/50 text-lg max-w-xl mx-auto">
+        {contractor.years_in_business}+ years serving {contractor.service_areas.slice(0,3).join(', ')}. Every project includes a written quote, {contractor.warranty_text.toLowerCase()}, and professional cleanup.
+      </p>
+    </div>
+  </section>
+
+  <!-- Service Cards -->
+  <section class="py-20 relative">
+    <div class="absolute inset-0 bg-[#0a0e17]"></div>
+    <div class="relative z-10 max-w-[900px] mx-auto px-6 space-y-16">
+      {services.map((service, i) => (
+        <div class="scroll-reveal" id={service.name.toLowerCase().replace(/\s+/g, '-')}>
+          <div class="aspect-[21/9] rounded-2xl mb-8 overflow-hidden">
+            <img src={service.image} alt={service.name} loading="lazy" class="w-full h-full object-cover" />
+          </div>
+
+          <div class="grid md:grid-cols-[1fr_auto] gap-8 items-start">
+            <div>
+              <h2 class="font-heading font-bold text-2xl md:text-3xl text-white mb-3">{service.name}</h2>
+              <p class="text-[17px] text-white/60 leading-relaxed mb-6">{service.longDesc}</p>
+
+              <!-- FAQ Accordion -->
+              <div class="space-y-3">
+                <p class="text-[13px] uppercase tracking-[0.05em] text-white/30 font-semibold">Common Questions</p>
+                {service.faqs.map((faq) => (
+                  <details class="group border border-white/10 rounded-xl overflow-hidden">
+                    <summary class="flex items-center justify-between px-5 py-4 cursor-pointer text-[15px] font-medium text-white hover:bg-white/5 transition-colors">
+                      {faq.q}
+                      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="flex-shrink-0 ml-4 transition-transform group-open:rotate-180 text-white/30"><path d="M6 9l6 6 6-6"/></svg>
+                    </summary>
+                    <div class="px-5 pb-4 text-[15px] text-white/50 leading-relaxed">{faq.a}</div>
+                  </details>
+                ))}
+              </div>
+            </div>
+
+            <!-- Price + CTA sidebar -->
+            <div class="md:sticky md:top-28 glass-card p-6 text-center md:min-w-[220px]">
+              <p class="text-[13px] uppercase tracking-[0.05em] text-white/30 font-semibold mb-1">Starting At</p>
+              <p class="font-heading font-extrabold text-2xl text-white mb-4">{service.price}</p>
+              <a href="#quoter" class="block bg-[#E87C3E] text-white px-6 py-3 rounded-xl font-bold text-[15px] hover:opacity-90 transition-opacity">
+                Get Estimate for {service.name}
+              </a>
+              <p class="text-[13px] text-white/30 mt-3">AI-powered. Instant response.</p>
+            </div>
+          </div>
+
+          {i < services.length - 1 && <hr class="mt-16 border-white/10" />}
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <!-- AI Quoter -->
+  <section id="quoter" class="py-24 relative">
+    <div class="absolute inset-0 bg-gradient-to-b from-[#0a0e17] to-[#111827]"></div>
+    <div class="relative z-10 max-w-3xl mx-auto px-6 text-center">
+      <div class="scroll-reveal">
+        <p class="text-[13px] uppercase tracking-[0.15em] text-[#E87C3E] font-semibold mb-3">Not Sure What You Need?</p>
+        <h2 class="font-heading font-extrabold text-3xl md:text-4xl text-white mb-3">
+          Our AI can help you figure it out.
+        </h2>
+        <p class="text-white/40 text-lg mb-3">We tell you what you DON'T need — that's our #1 reviewed trait.</p>
+        <p class="text-white/40 text-[15px] mb-10">Ask about pricing, timelines, or describe your project.</p>
+      </div>
+      <InlineChat client:visible slug={contractor.slug} businessName={contractor.business_name} />
+    </div>
+  </section>
+
+  <Footer
+    slug={contractor.slug}
+    businessName={contractor.business_name}
+    phone={contractor.phone}
+    phoneRaw={contractor.phoneRaw}
+    voicePhoneRaw={contractor.voicePhoneRaw}
+    licenseNumber={contractor.license_number}
+    serviceAreas={contractor.service_areas}
+    businessHours={contractor.business_hours}
+  />
+
+  <MobileCTA phoneRaw={contractor.voicePhoneRaw} contactHref="#quoter" />
+
+  <script>
+    const obs = new IntersectionObserver((entries) => {
+      entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+    }, { threshold: 0.15 });
+    document.querySelectorAll('.scroll-reveal').forEach(el => obs.observe(el));
+  </script>
+</BaseLayout>

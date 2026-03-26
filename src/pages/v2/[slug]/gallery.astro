@@ -1,0 +1,87 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import Nav from '../../../components/Nav-v2.astro';
+import Footer from '../../../components/Footer-v2.astro';
+import MobileCTA from '../../../components/MobileCTA.astro';
+import GalleryGrid from '../../../components/GalleryGrid';
+import BeforeAfterSlider from '../../../components/BeforeAfterSlider';
+import InlineChat from '../../../components/InlineChat';
+import { contractor, galleryProjects, beforeAfterPairs } from '../../../data/demo-v2';
+
+const title = `Our Work — ${contractor.business_name}`;
+const description = `Browse our portfolio of concrete projects in ${contractor.service_areas.slice(0,3).join(', ')}. Driveways, patios, foundations, and more.`;
+---
+
+<BaseLayout title={title} description={description} dark>
+  <Nav
+    slug={contractor.slug}
+    businessName={contractor.business_name}
+    phone={contractor.phone}
+    phoneRaw={contractor.phoneRaw}
+    voicePhoneRaw={contractor.voicePhoneRaw}
+    activePage="gallery"
+  />
+
+  <!-- Page Header -->
+  <section class="pt-32 pb-16 relative">
+    <div class="absolute inset-0 bg-gradient-to-b from-[#0a0e17] to-[#0f1623]"></div>
+    <div class="relative z-10 max-w-[1200px] mx-auto px-6 text-center">
+      <p class="text-[13px] uppercase tracking-[0.15em] text-[#E87C3E] font-semibold mb-3">Portfolio</p>
+      <h1 class="font-heading font-extrabold text-4xl md:text-[48px] leading-[1.1] text-white mb-4">Our Work</h1>
+      <p class="text-white/50 text-lg max-w-xl mx-auto">
+        Real projects. Real homeowners. Every one includes professional cleanup and a 5-year warranty.
+      </p>
+    </div>
+  </section>
+
+  <!-- Featured Transformations -->
+  <section class="py-16 relative">
+    <div class="absolute inset-0 bg-[#0a0e17]"></div>
+    <div class="relative z-10 max-w-[1000px] mx-auto px-6">
+      <h2 class="font-heading font-bold text-2xl md:text-3xl text-white text-center mb-8">Featured Transformations</h2>
+      <BeforeAfterSlider client:visible pairs={beforeAfterPairs} />
+    </div>
+  </section>
+
+  <!-- Gallery Grid -->
+  <section class="py-20 relative">
+    <div class="absolute inset-0 bg-[#0f1623]"></div>
+    <div class="relative z-10 max-w-[1200px] mx-auto px-6">
+      <h2 class="font-heading font-bold text-2xl md:text-3xl text-white text-center mb-10">All Projects</h2>
+      <GalleryGrid client:load projects={galleryProjects} />
+    </div>
+  </section>
+
+  <!-- AI Quoter -->
+  <section id="quoter" class="py-24 relative">
+    <div class="absolute inset-0 bg-gradient-to-b from-[#0f1623] to-[#111827]"></div>
+    <div class="relative z-10 max-w-3xl mx-auto px-6 text-center">
+      <div class="scroll-reveal">
+        <p class="text-[13px] uppercase tracking-[0.15em] text-[#E87C3E] font-semibold mb-3">Like What You See?</p>
+        <h2 class="font-heading font-extrabold text-3xl md:text-4xl text-white mb-3">Get your estimate.</h2>
+        <p class="text-white/40 text-lg mb-10">Ask our AI about pricing, timelines, or your specific project.</p>
+      </div>
+      <InlineChat client:visible slug={contractor.slug} businessName={contractor.business_name} />
+    </div>
+  </section>
+
+  <Footer
+    slug={contractor.slug}
+    businessName={contractor.business_name}
+    phone={contractor.phone}
+    phoneRaw={contractor.phoneRaw}
+    voicePhoneRaw={contractor.voicePhoneRaw}
+    licenseNumber={contractor.license_number}
+    serviceAreas={contractor.service_areas}
+    businessHours={contractor.business_hours}
+  />
+
+  <MobileCTA phoneRaw={contractor.voicePhoneRaw} contactHref="#quoter" />
+
+  <script>
+    const obs = new IntersectionObserver((entries) => {
+      entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+    }, { threshold: 0.15 });
+    document.querySelectorAll('.scroll-reveal').forEach(el => obs.observe(el));
+  </script>
+</BaseLayout>
