@@ -38,6 +38,7 @@ export default function InlineChatV2({ slug, businessName, apiBase = 'https://ap
     setInput('');
     setStreaming(true);
     setMessages(prev => [...prev, { role: 'assistant', content: '' }]);
+    window.dispatchEvent(new CustomEvent('chat-state', { detail: 'thinking' }));
 
     try {
       const history = [...messages, userMsg].map(m => ({ role: m.role, content: m.content }));
@@ -63,6 +64,7 @@ export default function InlineChatV2({ slug, businessName, apiBase = 'https://ap
               const data = JSON.parse(line.slice(6));
               if (data.text) {
                 fullText += data.text;
+                window.dispatchEvent(new CustomEvent('chat-state', { detail: 'responding' }));
                 setMessages(prev => {
                   const updated = [...prev];
                   updated[updated.length - 1] = { role: 'assistant', content: fullText };
@@ -81,6 +83,7 @@ export default function InlineChatV2({ slug, businessName, apiBase = 'https://ap
       });
     } finally {
       setStreaming(false);
+      window.dispatchEvent(new CustomEvent('chat-state', { detail: 'idle' }));
     }
   }, [input, streaming, messages, slug, sessionId, apiBase, started]);
 

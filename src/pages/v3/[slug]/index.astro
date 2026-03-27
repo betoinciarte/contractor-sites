@@ -5,6 +5,8 @@ import Footer from '../../../components/Footer-v3.astro';
 import MobileCTA from '../../../components/MobileCTA.astro';
 import InlineChat from '../../../components/InlineChat-v3';
 import ScrollRevealText from '../../../components/ScrollRevealText';
+import AIOrb from '../../../components/AIOrb';
+import ReviewMarquee from '../../../components/ReviewMarquee.astro';
 import { getContractor } from '../../../data/contractors';
 
 const { slug } = Astro.params;
@@ -23,6 +25,8 @@ const description = `Professional concrete services in ${contractor.service_area
 ---
 
 <BaseLayout title={title} description={description} dark hideChat noIndex={contractor.noindex}>
+  <!-- V3: Page entrance curtain -->
+  <div class="page-curtain" style={`background: ${t.accent}`} aria-hidden="true"></div>
   <div class="scroll-progress" id="scroll-progress"></div>
 
   <Nav
@@ -95,7 +99,9 @@ const description = `Professional concrete services in ${contractor.service_area
     <div class="absolute inset-0 bg-gradient-to-b from-[var(--bg)] to-[var(--surface)]"></div>
     <div class="relative z-10 max-w-3xl mx-auto px-6 text-center">
       <div class="scroll-reveal">
-        <p class="text-[13px] uppercase tracking-[0.15em] text-[var(--accent)] font-semibold mb-3">Online Estimator</p>
+        <div class="flex justify-center mb-6">
+          <AIOrb client:visible accent={t.accent} primary={t.primary} />
+        </div>
         <h2 class="font-heading font-extrabold text-3xl md:text-5xl text-white mb-3">
           Get your estimate in 60 seconds.
         </h2>
@@ -305,26 +311,13 @@ const description = `Professional concrete services in ${contractor.service_area
         ))}
       </div>
 
-      <div class="text-center mb-12 scroll-reveal">
+      <div class="text-center mb-8 scroll-reveal">
         <p class="text-[13px] uppercase tracking-[0.15em] text-[var(--accent)] font-semibold mb-3">Real Words, Real Homeowners</p>
         <h2 class="font-heading font-extrabold text-3xl md:text-4xl text-white">Don't take our word for it.</h2>
       </div>
 
-      <div class="grid md:grid-cols-3 gap-6 scroll-stagger">
-        {reviews.map((review) => (
-          <div class="glass-card p-8 relative group hover:bg-white/10 transition-colors">
-            <div class="absolute top-4 right-6 text-[var(--accent)]/30 text-5xl font-serif leading-none">&ldquo;</div>
-            <p class="text-white/80 text-[17px] italic leading-relaxed mb-5">&ldquo;{review.text}&rdquo;</p>
-            <div class="flex items-center gap-3">
-              <div class="w-10 h-10 rounded-full bg-[var(--accent)]/20 flex items-center justify-center text-[var(--accent)] font-bold text-[15px]">{review.name.charAt(0)}</div>
-              <div>
-                <p class="text-white text-[15px] font-semibold">{review.name}</p>
-                <p class="text-white/40 text-[13px]">{review.location} &middot; {review.service}</p>
-              </div>
-            </div>
-          </div>
-        ))}
-      </div>
+      <!-- V3: Infinite marquee of reviews -->
+      <ReviewMarquee reviews={reviews} accent={t.accent} />
 
       <!-- V2 NEW: Google Reviews Link -->
       <div class="text-center mt-10 scroll-reveal">
@@ -468,8 +461,19 @@ const description = `Professional concrete services in ${contractor.service_area
     }
     .tilt-card:hover::before { opacity: 1; }
 
+    /* ====== PAGE ENTRANCE CURTAIN ====== */
+    .page-curtain {
+      position: fixed; inset: 0; z-index: 9999; pointer-events: none;
+      animation: curtain-wipe 0.5s cubic-bezier(0.76, 0, 0.24, 1) 0.1s both;
+    }
+    @keyframes curtain-wipe {
+      from { clip-path: inset(0 0 0 0); }
+      to { clip-path: inset(0 0 0 100%); }
+    }
+
     /* ====== REDUCED MOTION ====== */
     @media (prefers-reduced-motion: reduce) {
+      .page-curtain { animation: none; display: none; }
       .mesh-gradient { animation: none; }
       .hero-cinema-bg { animation: none; opacity: 1; transform: none; }
       .hero-cinema-text { animation: none; opacity: 1; filter: none; transform: none; }
@@ -590,6 +594,22 @@ const description = `Professional concrete services in ${contractor.service_area
           }
         });
       }, { passive: true });
+
+      // ====== MAGNETIC CTA BUTTONS (desktop only) ======
+      document.querySelectorAll('.pulse-cta, .magnetic-btn').forEach((btn) => {
+        btn.addEventListener('mousemove', (e: Event) => {
+          const me = e as MouseEvent;
+          const rect = (btn as HTMLElement).getBoundingClientRect();
+          const x = me.clientX - rect.left - rect.width / 2;
+          const y = me.clientY - rect.top - rect.height / 2;
+          (btn as HTMLElement).style.transform = `translate(${x * 0.2}px, ${y * 0.2}px)`;
+        });
+        btn.addEventListener('mouseleave', () => {
+          (btn as HTMLElement).style.transform = '';
+          (btn as HTMLElement).style.transition = 'transform 0.4s cubic-bezier(0.16, 1, 0.3, 1)';
+          setTimeout(() => { (btn as HTMLElement).style.transition = ''; }, 400);
+        });
+      });
     }
   </script>
 </BaseLayout>

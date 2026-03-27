@@ -1,0 +1,86 @@
+---
+interface Review {
+  text: string;
+  name: string;
+  location: string;
+  service: string;
+}
+
+interface Props {
+  reviews: Review[];
+  accent?: string;
+}
+
+const { reviews, accent = '#E87C3E' } = Astro.props;
+// Duplicate reviews 4x for seamless infinite scroll
+const row1 = [...reviews, ...reviews, ...reviews, ...reviews];
+const row2 = [...reviews, ...reviews, ...reviews, ...reviews].reverse();
+---
+
+<div class="marquee-container overflow-hidden py-8">
+  <!-- Row 1: left to right -->
+  <div class="marquee-row mb-4">
+    <div class="marquee-track">
+      {row1.map((review, i) => (
+        <div class="marquee-card glass-card p-6 min-w-[320px] max-w-[400px] flex-shrink-0">
+          <p class="text-white/70 text-[14px] italic leading-relaxed mb-3 line-clamp-3">&ldquo;{review.text}&rdquo;</p>
+          <div class="flex items-center gap-2">
+            <div class="w-8 h-8 rounded-full flex items-center justify-center text-[12px] font-bold" style={`background: ${accent}33; color: ${accent}`}>{review.name.charAt(0)}</div>
+            <div>
+              <p class="text-white text-[13px] font-semibold">{review.name}</p>
+              <p class="text-white/30 text-[11px]">{review.service}</p>
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+
+  <!-- Row 2: right to left -->
+  <div class="marquee-row marquee-reverse">
+    <div class="marquee-track">
+      {row2.map((review, i) => (
+        <div class="marquee-card glass-card p-6 min-w-[320px] max-w-[400px] flex-shrink-0">
+          <p class="text-white/70 text-[14px] italic leading-relaxed mb-3 line-clamp-3">&ldquo;{review.text}&rdquo;</p>
+          <div class="flex items-center gap-2">
+            <div class="w-8 h-8 rounded-full flex items-center justify-center text-[12px] font-bold" style={`background: ${accent}33; color: ${accent}`}>{review.name.charAt(0)}</div>
+            <div>
+              <p class="text-white text-[13px] font-semibold">{review.name}</p>
+              <p class="text-white/30 text-[11px]">{review.service}</p>
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+</div>
+
+<style>
+  .marquee-row {
+    display: flex;
+    overflow: hidden;
+    mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+    -webkit-mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+  }
+  .marquee-track {
+    display: flex;
+    gap: 1rem;
+    animation: marquee-scroll 60s linear infinite;
+  }
+  .marquee-reverse .marquee-track {
+    animation-direction: reverse;
+    animation-duration: 70s;
+  }
+  .marquee-container:hover .marquee-track {
+    animation-play-state: paused;
+  }
+  @keyframes marquee-scroll {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .marquee-track { animation: none !important; }
+    .marquee-row { flex-wrap: wrap; justify-content: center; gap: 1rem; mask-image: none; -webkit-mask-image: none; }
+    .marquee-card { min-width: 280px; }
+  }
+</style>
