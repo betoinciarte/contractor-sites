@@ -43,7 +43,7 @@ const description = `Professional concrete services in ${contractor.service_area
   <!-- ============================================
        1. HERO — Emotional hook + 3 clear CTAs
        ============================================ -->
-  <section data-hero class="relative min-h-[110vh] flex items-center justify-center overflow-hidden">
+  <section data-hero class="relative min-h-[90vh] md:min-h-[110vh] flex items-center justify-center overflow-hidden">
     <img src={heroImage} alt="" class="absolute inset-0 w-full h-full object-cover hero-bg hero-cinema-bg" />
     <div class="absolute inset-0 bg-gradient-to-b from-black/20 via-black/50 to-[var(--bg)]"></div>
 
@@ -246,7 +246,7 @@ const description = `Professional concrete services in ${contractor.service_area
                 </div>
                 <div class="order-1 md:order-2">
                   <div class="aspect-[4/3] rounded-2xl overflow-hidden shadow-2xl shadow-black/40">
-                    <img src={step.image} alt={step.title} class="w-full h-full object-cover" />
+                    <img src={step.image} alt={step.title} loading="lazy" class="w-full h-full object-cover" />
                   </div>
                 </div>
               </div>
@@ -266,7 +266,7 @@ const description = `Professional concrete services in ${contractor.service_area
       <div class="grid md:grid-cols-[1fr_1.2fr] gap-10 items-center">
         <div class="scroll-reveal">
           <div class="aspect-[4/3] rounded-2xl overflow-hidden shadow-2xl shadow-black/40">
-            <img src={crewImage} alt={`${contractor.owner_name} and the ${contractor.business_name} crew`} class="w-full h-full object-cover" />
+            <img src={crewImage} alt={`${contractor.owner_name} and the ${contractor.business_name} crew`} loading="lazy" class="w-full h-full object-cover" />
           </div>
         </div>
         <div class="scroll-reveal">
