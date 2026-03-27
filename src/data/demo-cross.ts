@@ -5,8 +5,15 @@
 // ============================================================
 
 // --- Brand colors extracted from ccsconcretedriveways.com ---
-export const brandAccent = '#eb6707';  // their orange
-export const brandPrimary = '#007cba'; // their blue
+export const brandAccent = '#eb6707';
+export const brandPrimary = '#007cba';
+export const theme = {
+  accent: '#eb6707',
+  accentLight: 'rgba(235,103,7,0.12)',
+  primary: '#007cba',
+  surface: '#0c1829',     // dark con tinte azul
+  bg: '#060d18',          // negro con tinte azul
+};
 
 // --- Real photos from their website ---
 const CCS = 'https://ccsconcretedriveways.com/wp-content/uploads';

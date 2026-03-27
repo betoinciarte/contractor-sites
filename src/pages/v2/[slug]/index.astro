@@ -12,7 +12,8 @@ if (!data) return new Response(null, { status: 404, statusText: 'Contractor not 
 
 const { contractor, services, reviews, stats, statCards, heroImage, crewImage, processImages, beforeAfterPairs, galleryProjects, badges } = data;
 const pc = (data as any).personalizedCopy || null;
-const accent = (data as any).brandAccent || '#E87C3E';
+const t = (data as any).theme || { accent: '#E87C3E', accentLight: 'rgba(232,124,62,0.12)', primary: '#1E3D5F', surface: '#0f1623', bg: '#0a0e17' };
+const accent = t.accent;
 const callNumber = contractor.voicePhoneRaw || contractor.phoneRaw;
 const hasVoiceAI = contractor.hasVoiceAI !== false;
 
@@ -38,11 +39,11 @@ const description = `Professional concrete services in ${contractor.service_area
        1. HERO — Emotional hook + 3 clear CTAs
        ============================================ -->
   <section data-hero class="relative min-h-[110vh] flex items-center justify-center overflow-hidden">
-    <img src={heroImage} alt="" class="absolute inset-0 w-full h-full object-cover hero-bg" />
-    <div class="absolute inset-0 bg-gradient-to-b from-black/20 via-black/50 to-[#0a0e17]"></div>
+    <img src={heroImage} alt="" class="absolute inset-0 w-full h-full object-cover hero-bg hero-cinema-bg" />
+    <div class="absolute inset-0 bg-gradient-to-b from-black/20 via-black/50 to-[var(--bg)]"></div>
 
     <div class="relative z-10 text-center px-6 max-w-4xl">
-      <p class="text-[13px] uppercase tracking-[0.15em] text-[var(--accent)] mb-6 font-semibold hero-text-1">
+      <p class="text-[13px] uppercase tracking-[0.15em] text-[var(--accent)] mb-6 font-semibold hero-cinema-text hero-cinema-text-1">
         {contractor.service_areas[0]} &middot; {stats.years}+ Years &middot; {stats.rating}★ on Google
       </p>
       <!-- A/B TEST HEADLINES (swap for testing):
@@ -50,14 +51,14 @@ const description = `Professional concrete services in ${contractor.service_area
         ALT B (Trust-focused): "Dallas trusts Rodriguez Concrete. 4.9 stars and 15 years of keeping our word."
         ALT C (Problem-focused): "Stop worrying about your driveway. Start enjoying it."
       -->
-      <h1 class="font-heading font-extrabold text-white text-[clamp(2.5rem,7vw,4.5rem)] leading-[1.05] mb-6 hero-text-2" set:html={pc?.headline || `Beautiful concrete that lasts — <span class="gradient-text">with a price you know before we start.</span>`} />
-      <p class="text-white/60 text-lg md:text-xl mb-4 mx-auto max-w-2xl hero-text-3">
+      <h1 class="font-heading font-extrabold text-white text-[clamp(2.5rem,7vw,4.5rem)] leading-[1.05] mb-6 hero-cinema-text hero-cinema-text-2" set:html={pc?.headline || `Beautiful concrete that lasts — <span class="gradient-text">with a price you know before we start.</span>`} />
+      <p class="text-white/60 text-lg md:text-xl mb-4 mx-auto max-w-2xl hero-cinema-text hero-cinema-text-3">
         {pc?.subheadline || `Licensed, insured, and rated ${stats.rating} on Google. We show up when we say we will, charge what we quoted, and clean up when we're done.`}
       </p>
       <p class="text-white/50 text-sm mb-10 font-medium hero-text-3" style={`color: ${accent}cc`}>
         {pc?.urgency || 'Spring schedules fill up 3–4 weeks out. Book your free estimate now.'}
       </p>
-      <div class="flex flex-col sm:flex-row gap-4 justify-center hero-text-4">
+      <div class="flex flex-col sm:flex-row gap-4 justify-center hero-cinema-text hero-cinema-text-4">
         <a href="#quoter" class="bg-[var(--accent)] text-white px-10 py-5 rounded-2xl font-bold text-lg shadow-lg shadow-[var(--accent)]/20 hover:shadow-xl hover:shadow-[var(--accent)]/30 hover:scale-[1.03] transition-all pulse-cta">
           Get Your Estimate Online
         </a>
@@ -76,7 +77,7 @@ const description = `Professional concrete services in ${contractor.service_area
        V2 NEW: BADGES BAR — Trust signals before quoter
        ============================================ -->
   <section class="relative py-6">
-    <div class="absolute inset-0 bg-[#0a0e17]"></div>
+    <div class="absolute inset-0 bg-[var(--bg)]"></div>
     <div class="relative z-10 max-w-4xl mx-auto px-6">
       <div class="flex items-center justify-center gap-6 md:gap-10 flex-wrap">
         {badges.map((badge) => (
@@ -90,7 +91,7 @@ const description = `Professional concrete services in ${contractor.service_area
        2. AI QUOTER — Position #2, right after hero + badges
        ============================================ -->
   <section id="quoter" class="py-24 relative">
-    <div class="absolute inset-0 bg-gradient-to-b from-[#0a0e17] to-[#0f1623]"></div>
+    <div class="absolute inset-0 bg-gradient-to-b from-[var(--bg)] to-[var(--surface)]"></div>
     <div class="relative z-10 max-w-3xl mx-auto px-6 text-center">
       <div class="scroll-reveal">
         <p class="text-[13px] uppercase tracking-[0.15em] text-[var(--accent)] font-semibold mb-3">Online Estimator</p>
@@ -117,7 +118,7 @@ const description = `Professional concrete services in ${contractor.service_area
        3. FEAR DEFUSERS (moved up — resolve objections early) — Data-driven trust builders
        ============================================ -->
   <section class="py-24 relative">
-    <div class="absolute inset-0 bg-[#0a0e17]"></div>
+    <div class="absolute inset-0 bg-[var(--bg)]"></div>
     <div class="relative z-10 max-w-5xl mx-auto px-6">
       <div class="text-center mb-14 scroll-reveal">
         <p class="text-[13px] uppercase tracking-[0.15em] font-semibold mb-3" style={`color: ${accent}`}>Based on {stats.projects}+ Reviews</p>
@@ -167,7 +168,7 @@ const description = `Professional concrete services in ${contractor.service_area
        V2 NEW: MID-PAGE CTA — After trust is built
        ============================================ -->
   <section class="py-14 relative">
-    <div class="absolute inset-0 bg-[#0a0e17]"></div>
+    <div class="absolute inset-0 bg-[var(--bg)]"></div>
     <div class="relative z-10 max-w-3xl mx-auto px-6 text-center scroll-reveal">
       <p class="text-white/50 text-lg mb-6">{pc?.midCtaText || 'Got questions about your project? Get real pricing — no sales pitch.'}</p>
       <div class="flex flex-col sm:flex-row gap-4 justify-center">
@@ -185,7 +186,7 @@ const description = `Professional concrete services in ${contractor.service_area
        5. RECENT PROJECTS — Real work gallery
        ============================================ -->
   <section class="py-20 relative">
-    <div class="absolute inset-0 bg-[#0a0e17]"></div>
+    <div class="absolute inset-0 bg-[var(--bg)]"></div>
     <div class="relative z-10 max-w-5xl mx-auto px-6">
       <div class="text-center mb-10 scroll-reveal">
         <p class="text-[13px] uppercase tracking-[0.15em] font-semibold mb-3" style={`color: ${accent}`}>Real Results</p>
@@ -212,7 +213,7 @@ const description = `Professional concrete services in ${contractor.service_area
        ============================================ -->
   <section class="process-scroll" id="process-section">
     <div class="process-sticky">
-      <div class="absolute inset-0 bg-gradient-to-b from-[#0a0e17] to-[#0f1623]"></div>
+      <div class="absolute inset-0 bg-gradient-to-b from-[var(--bg)] to-[var(--surface)]"></div>
       <div class="relative z-10 w-full max-w-6xl mx-auto px-6">
         <div class="text-center mb-6">
           <p class="text-[13px] uppercase tracking-[0.15em] text-[var(--accent)] font-semibold mb-3">Our Process</p>
@@ -253,7 +254,7 @@ const description = `Professional concrete services in ${contractor.service_area
        V2 NEW: MEET YOUR CONTRACTOR — Human connection
        ============================================ -->
   <section class="py-24 relative">
-    <div class="absolute inset-0 bg-[#0a0e17]"></div>
+    <div class="absolute inset-0 bg-[var(--bg)]"></div>
     <div class="relative z-10 max-w-4xl mx-auto px-6">
       <div class="grid md:grid-cols-[1fr_1.2fr] gap-10 items-center">
         <div class="scroll-reveal">
@@ -287,7 +288,7 @@ const description = `Professional concrete services in ${contractor.service_area
        V2: Fixed stats, added id="reviews", added Google link
        ============================================ -->
   <section id="reviews" class="py-28 relative overflow-hidden">
-    <div class="absolute inset-0 bg-[#0a0e17]"></div>
+    <div class="absolute inset-0 bg-[var(--bg)]"></div>
     <div class="relative z-10 max-w-5xl mx-auto px-6">
       <div class="grid grid-cols-2 md:grid-cols-4 gap-6 mb-20 scroll-stagger" id="stats-section">
         {statCards.map((stat) => (
@@ -338,7 +339,7 @@ const description = `Professional concrete services in ${contractor.service_area
        7. SERVICES — Grid with transparent pricing
        ============================================ -->
   <section class="py-20 pb-32 md:py-20 relative">
-    <div class="absolute inset-0 bg-[#111827]"></div>
+    <div class="absolute inset-0 bg-[var(--surface)]"></div>
     <div class="relative z-10 max-w-5xl mx-auto px-6">
       <div class="text-center mb-12 scroll-reveal">
         <p class="text-[13px] uppercase tracking-[0.15em] font-semibold mb-3" style={`color: ${accent}`}>Concrete Services in {contractor.service_areas[0]}</p>
@@ -365,7 +366,7 @@ const description = `Professional concrete services in ${contractor.service_area
        8. FINAL CTA — 3 clear options
        ============================================ -->
   <section class="py-28 relative">
-    <div class="absolute inset-0 bg-gradient-to-b from-[#111827] to-[#0a0e17]"></div>
+    <div class="absolute inset-0 bg-gradient-to-b from-[var(--surface)] to-[var(--bg)]"></div>
     <div class="relative z-10 max-w-4xl mx-auto px-6 text-center">
       <div class="scroll-reveal">
         <h2 class="font-heading font-extrabold text-3xl md:text-5xl text-white mb-4">{pc?.ctaHeadline || 'Get your free estimate. Zero obligation.'}</h2>
@@ -397,13 +398,90 @@ const description = `Professional concrete services in ${contractor.service_area
 
   <MobileCTA phoneRaw={callNumber} contactHref="#quoter" />
 
-  <!-- V2: CSS overrides — accent color is dynamic per contractor -->
-  <style is:global define:vars={{ accent }}>
+  <!-- V2: Dynamic theme — colors, effects, animations per contractor -->
+  <style is:global define:vars={{
+    accent: t.accent,
+    accentLight: t.accentLight,
+    primary: t.primary,
+    surface: t.surface,
+    bg: t.bg,
+  }}>
     .process-scroll { height: 200vh !important; }
     .gradient-text { background: linear-gradient(135deg, var(--accent), #fff) !important; -webkit-background-clip: text !important; -webkit-text-fill-color: transparent !important; }
     .pulse-cta { animation: pulse-accent 2s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
     @keyframes pulse-accent { 0%, 100% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--accent) 40%, transparent); } 50% { box-shadow: 0 0 20px 4px color-mix(in srgb, var(--accent) 20%, transparent); } }
+
+    /* Glass card uses theme surface */
+    .glass-card { background: var(--surface) !important; border-color: color-mix(in srgb, var(--accent) 10%, transparent) !important; }
+
+    /* ====== MESH GRADIENT BACKGROUND ====== */
+    .mesh-gradient {
+      position: fixed; inset: 0; z-index: 0; pointer-events: none;
+      background:
+        radial-gradient(ellipse 80% 50% at 20% 40%, color-mix(in srgb, var(--accent) 8%, transparent), transparent),
+        radial-gradient(ellipse 60% 80% at 80% 20%, color-mix(in srgb, var(--primary) 6%, transparent), transparent),
+        radial-gradient(ellipse 70% 60% at 60% 80%, color-mix(in srgb, var(--accent) 5%, transparent), transparent);
+      background-size: 200% 200%;
+      animation: mesh-drift 25s ease-in-out infinite;
+    }
+    @keyframes mesh-drift {
+      0%, 100% { background-position: 0% 0%; }
+      25% { background-position: 100% 50%; }
+      50% { background-position: 50% 100%; }
+      75% { background-position: 0% 50%; }
+    }
+
+    /* ====== CURSOR SPOTLIGHT ====== */
+    .cursor-spotlight {
+      position: fixed; inset: 0; z-index: 1; pointer-events: none;
+      background: radial-gradient(600px circle at var(--cx, -999px) var(--cy, -999px), color-mix(in srgb, var(--accent) 5%, transparent), transparent 70%);
+      transition: background 0.15s ease;
+    }
+
+    /* ====== HERO CINEMA ENTRANCE ====== */
+    .hero-cinema-bg {
+      animation: hero-zoom-out 1.2s cubic-bezier(0.16, 1, 0.3, 1) both;
+    }
+    @keyframes hero-zoom-out {
+      from { transform: scale(1.15); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+    .hero-cinema-text {
+      animation: hero-blur-in 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
+    }
+    .hero-cinema-text-1 { animation-delay: 0.2s; }
+    .hero-cinema-text-2 { animation-delay: 0.4s; }
+    .hero-cinema-text-3 { animation-delay: 0.6s; }
+    .hero-cinema-text-4 { animation-delay: 0.8s; }
+    @keyframes hero-blur-in {
+      from { filter: blur(8px); opacity: 0; transform: translateY(20px); }
+      to { filter: blur(0); opacity: 1; transform: translateY(0); }
+    }
+
+    /* ====== 3D CARD TILT + GLARE ====== */
+    .tilt-card { transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1); transform-style: preserve-3d; }
+    .tilt-card::before {
+      content: ''; position: absolute; inset: 0; border-radius: inherit;
+      background: radial-gradient(circle at var(--gx, 50%) var(--gy, 50%), rgba(255,255,255,0.08), transparent 60%);
+      opacity: 0; transition: opacity 0.4s; pointer-events: none; z-index: 10;
+    }
+    .tilt-card:hover::before { opacity: 1; }
+
+    /* ====== REDUCED MOTION ====== */
+    @media (prefers-reduced-motion: reduce) {
+      .mesh-gradient { animation: none; }
+      .hero-cinema-bg { animation: none; opacity: 1; transform: none; }
+      .hero-cinema-text { animation: none; opacity: 1; filter: none; transform: none; }
+      .tilt-card { transition: none; }
+      .tilt-card::before { display: none; }
+    }
   </style>
+
+  <!-- Mesh gradient background (fixed, behind everything) -->
+  <div class="mesh-gradient" aria-hidden="true"></div>
+
+  <!-- Cursor spotlight (desktop only) -->
+  <div class="cursor-spotlight" id="cursor-spotlight" aria-hidden="true"></div>
 
   <!-- SCROLL ENGINE -->
   <script>
@@ -476,5 +554,41 @@ const description = `Professional concrete services in ${contractor.service_area
     }
 
     // Forms removed in v2 — conversion is via AI chat + call only
+
+    // ====== CURSOR SPOTLIGHT (desktop only) ======
+    if (window.matchMedia('(hover: hover)').matches) {
+      const spot = document.getElementById('cursor-spotlight');
+      if (spot) {
+        document.addEventListener('mousemove', (e) => {
+          requestAnimationFrame(() => {
+            spot.style.setProperty('--cx', e.clientX + 'px');
+            spot.style.setProperty('--cy', e.clientY + 'px');
+          });
+        }, { passive: true });
+      }
+    }
+
+    // ====== 3D CARD TILT + GLARE (desktop only) ======
+    if (window.matchMedia('(hover: hover)').matches) {
+      document.addEventListener('mousemove', (e) => {
+        const cards = document.querySelectorAll('.glass-card');
+        cards.forEach((card) => {
+          const rect = (card as HTMLElement).getBoundingClientRect();
+          const isHovered = e.clientX >= rect.left && e.clientX <= rect.right && e.clientY >= rect.top && e.clientY <= rect.bottom;
+          if (isHovered) {
+            const x = (e.clientX - rect.left) / rect.width;
+            const y = (e.clientY - rect.top) / rect.height;
+            const rotateX = (y - 0.5) * -8;
+            const rotateY = (x - 0.5) * 8;
+            (card as HTMLElement).style.transform = `perspective(800px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+            (card as HTMLElement).style.setProperty('--gx', `${x * 100}%`);
+            (card as HTMLElement).style.setProperty('--gy', `${y * 100}%`);
+            if (!card.classList.contains('tilt-card')) card.classList.add('tilt-card');
+          } else {
+            (card as HTMLElement).style.transform = '';
+          }
+        });
+      }, { passive: true });
+    }
   </script>
 </BaseLayout>

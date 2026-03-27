@@ -2,6 +2,13 @@
 // Changes from v1: improved stats, same contractor data
 export const brandAccent = '#E87C3E';
 export const brandPrimary = '#1E3D5F';
+export const theme = {
+  accent: '#E87C3E',
+  accentLight: 'rgba(232,124,62,0.12)',
+  primary: '#1E3D5F',
+  surface: '#0f1623',
+  bg: '#0a0e17',
+};
 export const contractor = {
   business_name: 'Rodriguez Concrete',
   owner_name: 'Carlos Rodriguez',
