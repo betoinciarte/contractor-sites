@@ -156,14 +156,14 @@ export const beforeAfterPairs = [
 ];
 
 export const galleryProjects = [
-  { id: 1, title: 'New Concrete Driveway', category: 'Concrete Driveways', location: 'Houston, TX', image: `${CCS}/2025/02/houston-new-concrete-driveway-installation.jpg` },
-  { id: 2, title: 'Residential Driveway', category: 'Concrete Driveways', location: 'Houston, TX', image: `${CCS}/2025/02/residential-front-concrete-driveway-installation-houston-texas.jpg` },
-  { id: 3, title: 'Concrete Steps', category: 'Sidewalks & Walkways', location: 'Houston, TX', image: `${CCS}/2025/02/concrete-front-steps-installation-rotated.jpg` },
-  { id: 4, title: 'Paver Walkway', category: 'Sidewalks & Walkways', location: 'Katy, TX', image: `${CCS}/2025/02/concrete-paver-walkway-installation.jpg` },
-  { id: 5, title: 'Paver Stone Driveway', category: 'Concrete Driveways', location: 'Sugar Land, TX', image: `${CCS}/2025/02/residential-paver-stone-concrete-driveway-installation-new.jpg` },
-  { id: 6, title: 'Residential Concrete', category: 'Concrete Driveways', location: 'Pearland, TX', image: `${CCS}/2025/02/residential-concrete-installation-services3-768x1024.jpg` },
-  { id: 7, title: 'Full Driveway Service', category: 'Concrete Driveways', location: 'Houston, TX', image: `${CCS}/2024/02/Residential-Concrete-Driveways.jpg` },
-  { id: 8, title: 'Residential Project', category: 'Concrete Driveways', location: 'Cypress, TX', image: `${CCS}/2024/02/residential-concrete-driveway-services-in-houston-tx.jpg` },
+  { id: 1, title: 'New Concrete Driveway', category: 'Concrete Driveways', location: 'Houston, TX', image: `${CCS}/2025/02/houston-new-concrete-driveway-installation.jpg`, cost: '$7,200', timeline: '3 days' },
+  { id: 2, title: 'Residential Driveway', category: 'Concrete Driveways', location: 'Houston, TX', image: `${CCS}/2025/02/residential-front-concrete-driveway-installation-houston-texas.jpg`, cost: '$5,400', timeline: '2 days' },
+  { id: 3, title: 'Concrete Steps', category: 'Sidewalks & Walkways', location: 'Houston, TX', image: `${CCS}/2025/02/concrete-front-steps-installation-rotated.jpg`, cost: '$3,200', timeline: '2 days' },
+  { id: 4, title: 'Paver Walkway', category: 'Sidewalks & Walkways', location: 'Katy, TX', image: `${CCS}/2025/02/concrete-paver-walkway-installation.jpg`, cost: '$4,800', timeline: '3 days' },
+  { id: 5, title: 'Paver Stone Driveway', category: 'Concrete Driveways', location: 'Sugar Land, TX', image: `${CCS}/2025/02/residential-paver-stone-concrete-driveway-installation-new.jpg`, cost: '$9,500', timeline: '4 days' },
+  { id: 6, title: 'Residential Concrete', category: 'Concrete Driveways', location: 'Pearland, TX', image: `${CCS}/2025/02/residential-concrete-installation-services3-768x1024.jpg`, cost: '$6,100', timeline: '3 days' },
+  { id: 7, title: 'Full Driveway Service', category: 'Concrete Driveways', location: 'Houston, TX', image: `${CCS}/2024/02/Residential-Concrete-Driveways.jpg`, cost: '$5,800', timeline: '3 days' },
+  { id: 8, title: 'Residential Project', category: 'Concrete Driveways', location: 'Cypress, TX', image: `${CCS}/2024/02/residential-concrete-driveway-services-in-houston-tx.jpg`, cost: '$4,900', timeline: '2 days' },
 ];
 
 // --- Badges: THEIR real badges from their website ---

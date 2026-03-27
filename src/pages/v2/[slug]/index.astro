@@ -199,7 +199,7 @@ const description = `Professional concrete services in ${contractor.service_area
             </div>
             <div class="bg-white/5 px-4 py-3">
               <p class="text-white text-[15px] font-semibold">{p.title}</p>
-              <p class="text-white/40 text-[13px]">{p.location}</p>
+              <p class="text-white/40 text-[13px]">{p.location}{p.cost ? ` · ${p.cost}` : ''}{p.timeline ? ` · ${p.timeline}` : ''}</p>
             </div>
           </div>
         ))}
@@ -353,7 +353,7 @@ const description = `Professional concrete services in ${contractor.service_area
             </div>
             <div class="p-5">
               <h3 class="font-heading font-bold text-white text-lg">{s.name}</h3>
-              <p class="text-white/40 text-[14px] mt-1">{s.price}</p>
+              <p class="text-white/40 text-[14px] mt-1">{(s as any).priceDetail || s.price}</p>
             </div>
           </a>
         ))}
