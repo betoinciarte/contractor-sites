@@ -1,0 +1,100 @@
+---
+import '../styles/global.css';
+import { ClientRouter } from 'astro:transitions';
+
+interface Props {
+  title: string;
+  description: string;
+  ogImage?: string;
+  noIndex?: boolean;
+  dark?: boolean;
+  hideChat?: boolean;
+}
+
+const { title, description, ogImage, noIndex, dark = false, hideChat = false } = Astro.props;
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>{title}</title>
+  <meta name="description" content={description} />
+  {noIndex && <meta name="robots" content="noindex, nofollow" />}
+
+  <!-- Open Graph -->
+  <meta property="og:title" content={title} />
+  <meta property="og:description" content={description} />
+  <meta property="og:type" content="website" />
+  {ogImage && <meta property="og:image" content={ogImage} />}
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content={title} />
+  <meta name="twitter:description" content={description} />
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet" />
+
+  <!-- V3: View Transitions — pages morph like a native app -->
+  <ClientRouter />
+</head>
+<body class:list={['min-h-dvh', { 'bg-[#FAFAF8]': !dark, 'dark-page': dark }]}>
+  <slot />
+
+  <!-- V3: Lenis smooth scroll + GSAP ScrollTrigger init -->
+  <script>
+    import Lenis from 'lenis';
+    import { gsap } from 'gsap';
+    import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+    gsap.registerPlugin(ScrollTrigger);
+
+    let lenis: Lenis | null = null;
+
+    function initSmoothScroll() {
+      // Cleanup previous instances (ViewTransitions re-navigation)
+      if (lenis) {
+        lenis.destroy();
+        lenis = null;
+      }
+      ScrollTrigger.getAll().forEach(t => t.kill());
+      ScrollTrigger.clearScrollMemory();
+
+      // Init Lenis — smooth on desktop, native on mobile
+      lenis = new Lenis({
+        lerp: 0.1,
+        smoothWheel: true,
+      });
+
+      // Sync Lenis with GSAP
+      lenis.on('scroll', ScrollTrigger.update);
+      gsap.ticker.add((time) => {
+        lenis?.raf(time * 1000);
+      });
+      gsap.ticker.lagSmoothing(0);
+
+      // Scroll reveal observer (v3 version)
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) entry.target.classList.add('visible');
+        });
+      }, { threshold: 0.1 });
+      document.querySelectorAll('.scroll-reveal, .scroll-stagger, .stat-entrance, .reveal, .reveal-stagger').forEach((el) => {
+        observer.observe(el);
+      });
+    }
+
+    // Init on first load
+    initSmoothScroll();
+
+    // Re-init after View Transition navigation
+    document.addEventListener('astro:page-load', () => {
+      initSmoothScroll();
+    });
+  </script>
+</body>
+</html>

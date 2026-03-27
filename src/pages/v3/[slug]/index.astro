@@ -1,0 +1,594 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout-v3.astro';
+import Nav from '../../../components/Nav-v3.astro';
+import Footer from '../../../components/Footer-v3.astro';
+import MobileCTA from '../../../components/MobileCTA.astro';
+import InlineChat from '../../../components/InlineChat-v3';
+import { getContractor } from '../../../data/contractors';
+
+const { slug } = Astro.params;
+const data = getContractor(slug!);
+if (!data) return new Response(null, { status: 404, statusText: 'Contractor not found' });
+
+const { contractor, services, reviews, stats, statCards, heroImage, crewImage, processImages, beforeAfterPairs, galleryProjects, badges } = data;
+const pc = (data as any).personalizedCopy || null;
+const t = (data as any).theme || { accent: '#E87C3E', accentLight: 'rgba(232,124,62,0.12)', primary: '#1E3D5F', surface: '#0f1623', bg: '#0a0e17' };
+const accent = t.accent;
+const callNumber = contractor.voicePhoneRaw || contractor.phoneRaw;
+const hasVoiceAI = contractor.hasVoiceAI !== false;
+
+const title = `${contractor.business_name} — Concrete in ${contractor.service_areas[0]}`;
+const description = `Professional concrete services in ${contractor.service_areas.slice(0,3).join(', ')}. Licensed, insured, free estimates.`;
+---
+
+<BaseLayout title={title} description={description} dark hideChat noIndex={contractor.noindex}>
+  <div class="scroll-progress" id="scroll-progress"></div>
+
+  <Nav
+    slug={contractor.slug}
+    businessName={contractor.business_name}
+    phone={contractor.phone}
+    phoneRaw={contractor.phoneRaw}
+    voicePhoneRaw={callNumber}
+    activePage="home"
+    logoUrl={contractor.logoUrl}
+    accent={accent}
+  />
+
+  <!-- ============================================
+       1. HERO — Emotional hook + 3 clear CTAs
+       ============================================ -->
+  <section data-hero class="relative min-h-[110vh] flex items-center justify-center overflow-hidden">
+    <img src={heroImage} alt="" class="absolute inset-0 w-full h-full object-cover hero-bg hero-cinema-bg" />
+    <div class="absolute inset-0 bg-gradient-to-b from-black/20 via-black/50 to-[var(--bg)]"></div>
+
+    <div class="relative z-10 text-center px-6 max-w-4xl">
+      <p class="text-[13px] uppercase tracking-[0.15em] text-[var(--accent)] mb-6 font-semibold hero-cinema-text hero-cinema-text-1">
+        {contractor.service_areas[0]} &middot; {stats.years}+ Years &middot; {stats.rating}★ on Google
+      </p>
+      <!-- A/B TEST HEADLINES (swap for testing):
+        CURRENT (Outcome + Objection): "Beautiful concrete that lasts — with a price you know before we start."
+        ALT B (Trust-focused): "Dallas trusts Rodriguez Concrete. 4.9 stars and 15 years of keeping our word."
+        ALT C (Problem-focused): "Stop worrying about your driveway. Start enjoying it."
+      -->
+      <h1 class="font-heading font-extrabold text-white text-[clamp(2.5rem,7vw,4.5rem)] leading-[1.05] mb-6 hero-cinema-text hero-cinema-text-2" set:html={pc?.headline || `Beautiful concrete that lasts — <span class="gradient-text">with a price you know before we start.</span>`} />
+      <p class="text-white/60 text-lg md:text-xl mb-4 mx-auto max-w-2xl hero-cinema-text hero-cinema-text-3">
+        {pc?.subheadline || `Licensed, insured, and rated ${stats.rating} on Google. We show up when we say we will, charge what we quoted, and clean up when we're done.`}
+      </p>
+      <p class="text-white/50 text-sm mb-10 font-medium hero-text-3" style={`color: ${accent}cc`}>
+        {pc?.urgency || 'Spring schedules fill up 3–4 weeks out. Book your free estimate now.'}
+      </p>
+      <div class="flex flex-col sm:flex-row gap-4 justify-center hero-cinema-text hero-cinema-text-4">
+        <a href="#quoter" class="bg-[var(--accent)] text-white px-10 py-5 rounded-2xl font-bold text-lg shadow-lg shadow-[var(--accent)]/20 hover:shadow-xl hover:shadow-[var(--accent)]/30 hover:scale-[1.03] transition-all pulse-cta">
+          Get Your Estimate Online
+        </a>
+        <a href={`tel:${callNumber}`} class="border border-white/20 text-white px-10 py-5 rounded-2xl font-semibold text-lg backdrop-blur-sm hover:bg-white/10 transition-all">
+          {hasVoiceAI ? 'Call — AI Picks Up Instantly' : `Call ${contractor.phone}`}
+        </a>
+      </div>
+    </div>
+
+    <div class="absolute bottom-12 left-1/2 -translate-x-1/2 bounce-down">
+      <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5" opacity="0.4"><path d="M6 9l6 6 6-6"></path></svg>
+    </div>
+  </section>
+
+  <!-- ============================================
+       V2 NEW: BADGES BAR — Trust signals before quoter
+       ============================================ -->
+  <section class="relative py-6">
+    <div class="absolute inset-0 bg-[var(--bg)]"></div>
+    <div class="relative z-10 max-w-4xl mx-auto px-6">
+      <div class="flex items-center justify-center gap-6 md:gap-10 flex-wrap">
+        {badges.map((badge) => (
+          <img src={badge.src} alt={badge.alt} class="h-12 md:h-14 opacity-70 hover:opacity-100 transition-opacity" loading="lazy" />
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================
+       2. AI QUOTER — Position #2, right after hero + badges
+       ============================================ -->
+  <section id="quoter" class="py-24 relative">
+    <div class="absolute inset-0 bg-gradient-to-b from-[var(--bg)] to-[var(--surface)]"></div>
+    <div class="relative z-10 max-w-3xl mx-auto px-6 text-center">
+      <div class="scroll-reveal">
+        <p class="text-[13px] uppercase tracking-[0.15em] text-[var(--accent)] font-semibold mb-3">Online Estimator</p>
+        <h2 class="font-heading font-extrabold text-3xl md:text-5xl text-white mb-3">
+          Get your estimate in 60 seconds.
+        </h2>
+        <p class="text-white/40 text-lg mb-10 mx-auto">
+          {pc?.quoterSubtext || `Trained on 750+ real projects in ${contractor.service_areas[0]}. Ask about costs, timelines, or anything about your project.`}
+        </p>
+      </div>
+
+      <InlineChat client:visible slug={contractor.slug} businessName={contractor.business_name} badgeText={hasVoiceAI ? 'AI assistant online — responds instantly' : 'Online estimator — get pricing now'} />
+
+      <!-- Prefer to call? -->
+      <div class="mt-8 scroll-reveal">
+        <p class="text-white/30 text-[15px]">Prefer to talk?
+          <a href={`tel:${callNumber}`} class="text-[var(--accent)] hover:text-[var(--accent)]/80 font-semibold transition-colors">{hasVoiceAI ? 'Call — AI picks up instantly.' : `Call ${contractor.phone}`}</a>
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================
+       3. FEAR DEFUSERS (moved up — resolve objections early) — Data-driven trust builders
+       ============================================ -->
+  <section class="py-24 relative">
+    <div class="absolute inset-0 bg-[var(--bg)]"></div>
+    <div class="relative z-10 max-w-5xl mx-auto px-6">
+      <div class="text-center mb-14 scroll-reveal">
+        <p class="text-[13px] uppercase tracking-[0.15em] font-semibold mb-3" style={`color: ${accent}`}>Based on {stats.projects}+ Reviews</p>
+        <h2 class="font-heading font-extrabold text-3xl md:text-4xl text-white">
+          We already know your concerns.
+        </h2>
+      </div>
+
+      <div class="grid sm:grid-cols-2 gap-6 scroll-stagger">
+        {pc?.fearDefusers ? (
+          pc.fearDefusers.map((fd: any) => (
+            <div class="glass-card p-8 group hover:bg-white/10 transition-colors">
+              <p class="text-white/30 text-[13px] uppercase tracking-wider mb-3">{fd.fear}</p>
+              <h3 class="font-heading font-bold text-xl text-white mb-2">{fd.answer}</h3>
+              <p class="text-white/50 text-[15px] leading-relaxed">{fd.detail}</p>
+            </div>
+          ))
+        ) : (
+          <>
+            <div class="glass-card p-8 group hover:bg-white/10 transition-colors">
+              <p class="text-white/30 text-[13px] uppercase tracking-wider mb-3">"What if they upsell me?"</p>
+              <h3 class="font-heading font-bold text-xl text-white mb-2">We tell you what you DON'T need.</h3>
+              <p class="text-white/50 text-[15px] leading-relaxed">9.5% of our reviews explicitly mention our honesty as the #1 reason they chose us.</p>
+            </div>
+            <div class="glass-card p-8 group hover:bg-white/10 transition-colors">
+              <p class="text-white/30 text-[13px] uppercase tracking-wider mb-3">"What about hidden costs?"</p>
+              <h3 class="font-heading font-bold text-xl text-white mb-2">Our quote is the price. Period.</h3>
+              <p class="text-white/50 text-[15px] leading-relaxed">No surprises, no escalation. The price we quote is the price you pay.</p>
+            </div>
+            <div class="glass-card p-8 group hover:bg-white/10 transition-colors">
+              <p class="text-white/30 text-[13px] uppercase tracking-wider mb-3">"Will they leave a mess?"</p>
+              <h3 class="font-heading font-bold text-xl text-white mb-2">Left cleaner than we found it.</h3>
+              <p class="text-white/50 text-[15px] leading-relaxed">We protect your landscaping, document everything, and clean up daily.</p>
+            </div>
+            <div class="glass-card p-8 group hover:bg-white/10 transition-colors">
+              <p class="text-white/30 text-[13px] uppercase tracking-wider mb-3">"Will they communicate?"</p>
+              <h3 class="font-heading font-bold text-xl text-white mb-2">You always know what's happening.</h3>
+              <p class="text-white/50 text-[15px] leading-relaxed">Clear communication at every step. No ghosting, no guessing.</p>
+            </div>
+          </>
+        )}
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================
+       V2 NEW: MID-PAGE CTA — After trust is built
+       ============================================ -->
+  <section class="py-14 relative">
+    <div class="absolute inset-0 bg-[var(--bg)]"></div>
+    <div class="relative z-10 max-w-3xl mx-auto px-6 text-center scroll-reveal">
+      <p class="text-white/50 text-lg mb-6">{pc?.midCtaText || 'Got questions about your project? Get real pricing — no sales pitch.'}</p>
+      <div class="flex flex-col sm:flex-row gap-4 justify-center">
+        <a href="#quoter" class="bg-[var(--accent)] text-white px-8 py-4 rounded-2xl font-bold text-lg hover:opacity-90 transition-opacity">
+          Chat With Us
+        </a>
+        <a href={`tel:${callNumber}`} class="border border-white/20 text-white px-8 py-4 rounded-2xl font-semibold text-lg hover:bg-white/10 transition-all">
+          {hasVoiceAI ? 'Call — AI Picks Up' : `Call ${contractor.phone}`}
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================
+       5. RECENT PROJECTS — Real work gallery
+       ============================================ -->
+  <section class="py-20 relative">
+    <div class="absolute inset-0 bg-[var(--bg)]"></div>
+    <div class="relative z-10 max-w-5xl mx-auto px-6">
+      <div class="text-center mb-10 scroll-reveal">
+        <p class="text-[13px] uppercase tracking-[0.15em] font-semibold mb-3" style={`color: ${accent}`}>Real Results</p>
+        <h2 class="font-heading font-extrabold text-3xl md:text-4xl text-white">Recent projects in {contractor.service_areas[0]}.</h2>
+      </div>
+      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 scroll-stagger">
+        {galleryProjects.slice(0, 6).map((p: any) => (
+          <div class="rounded-2xl overflow-hidden shadow-xl shadow-black/30 group">
+            <div class="aspect-[4/3] overflow-hidden">
+              <img src={p.image} alt={p.title} loading="lazy" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
+            </div>
+            <div class="bg-white/5 px-4 py-3">
+              <p class="text-white text-[15px] font-semibold">{p.title}</p>
+              <p class="text-white/40 text-[13px]">{p.location}{p.cost ? ` · ${p.cost}` : ''}{p.timeline ? ` · ${p.timeline}` : ''}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================
+       6. PROCESS — 3 steps sticky
+       ============================================ -->
+  <section class="process-scroll" id="process-section">
+    <div class="process-sticky">
+      <div class="absolute inset-0 bg-gradient-to-b from-[var(--bg)] to-[var(--surface)]"></div>
+      <div class="relative z-10 w-full max-w-6xl mx-auto px-6">
+        <div class="text-center mb-6">
+          <p class="text-[13px] uppercase tracking-[0.15em] text-[var(--accent)] font-semibold mb-3">Our Process</p>
+          <h2 class="font-heading font-extrabold text-3xl md:text-5xl text-white">From call to <span class="gradient-text">done.</span></h2>
+        </div>
+        <div class="flex justify-center gap-3 mb-10" id="step-dots">
+          <div class="step-dot w-3 h-3 rounded-full bg-[var(--accent)] transition-all"></div>
+          <div class="step-dot w-3 h-3 rounded-full bg-white/20 transition-all"></div>
+          <div class="step-dot w-3 h-3 rounded-full bg-white/20 transition-all"></div>
+        </div>
+        <div class="relative h-[50vh]" id="process-cards">
+          {(pc?.processSteps || [
+            { num: '01', title: 'Call or Chat. Get a Price in Minutes.', desc: 'Call us or use our online estimator — you get a ballpark price right away. No waiting, no voicemail. Then we schedule a free on-site visit at your convenience.' },
+            { num: '02', title: 'Free On-Site Estimate. No Surprises.', desc: 'We come to your property, measure everything, and give you a fixed price in writing. That quote is the price — period. No hidden fees, no change orders you didn\'t approve.' },
+            { num: '03', title: 'We Build. You Relax.', desc: 'Our crew arrives on schedule with daily photo updates. When we\'re done: walk-through inspection, professional cleanup, and your warranty documentation. Most projects: 2–5 days.' },
+          ]).map((step: any, i: number) => ({ ...step, image: processImages[i] })).map((step: any, i: number) => (
+            <div class={`process-step-card ${i === 0 ? 'active' : ''}`} data-step={i}>
+              <div class="grid md:grid-cols-2 gap-8 items-center max-w-4xl mx-auto">
+                <div class="order-2 md:order-1">
+                  <span class="text-[var(--accent)] font-heading font-extrabold text-6xl opacity-20">{step.num}</span>
+                  <h3 class="font-heading font-bold text-2xl md:text-3xl text-white mt-2 mb-4">{step.title}</h3>
+                  <p class="text-white/60 text-[17px] leading-relaxed">{step.desc}</p>
+                </div>
+                <div class="order-1 md:order-2">
+                  <div class="aspect-[4/3] rounded-2xl overflow-hidden shadow-2xl shadow-black/40">
+                    <img src={step.image} alt={step.title} class="w-full h-full object-cover" />
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================
+       V2 NEW: MEET YOUR CONTRACTOR — Human connection
+       ============================================ -->
+  <section class="py-24 relative">
+    <div class="absolute inset-0 bg-[var(--bg)]"></div>
+    <div class="relative z-10 max-w-4xl mx-auto px-6">
+      <div class="grid md:grid-cols-[1fr_1.2fr] gap-10 items-center">
+        <div class="scroll-reveal">
+          <div class="aspect-[4/3] rounded-2xl overflow-hidden shadow-2xl shadow-black/40">
+            <img src={crewImage} alt={`${contractor.owner_name} and the ${contractor.business_name} crew`} class="w-full h-full object-cover" />
+          </div>
+        </div>
+        <div class="scroll-reveal">
+          <p class="text-[13px] uppercase tracking-[0.15em] text-[var(--accent)] font-semibold mb-3">Meet Your Contractor</p>
+          <h2 class="font-heading font-extrabold text-2xl md:text-3xl text-white mb-4">
+            {pc?.meetHeadline || `${contractor.owner_name}. ${stats.years} years. Same phone number.`}
+          </h2>
+          <p class="text-white/60 text-[17px] leading-relaxed mb-4">
+            {pc?.meetText1 || `${contractor.owner_name} started ${contractor.business_name} ${stats.years} years ago with one truck and a simple promise: treat every driveway like it was his own. Today, the trucks have multiplied — but the promise hasn't changed.`}
+          </p>
+          <p class="text-white/60 text-[17px] leading-relaxed mb-6">
+            {pc?.meetText2 || `Every project is personally reviewed. Every crew member is trained in-house. And when you call, you're talking to people who live and work in ${contractor.service_areas[0]} — not a call center.`}
+          </p>
+          <div class="flex flex-wrap gap-3">
+            <span class="text-[13px] text-white/50 bg-white/5 px-4 py-2 rounded-full">Licensed: {contractor.license_number}</span>
+            <span class="text-[13px] text-white/50 bg-white/5 px-4 py-2 rounded-full">{contractor.warranty_text}</span>
+            <span class="text-[13px] text-white/50 bg-white/5 px-4 py-2 rounded-full">Locally owned</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================
+       8. SOCIAL PROOF — Improved stats + Real reviews
+       V2: Fixed stats, added id="reviews", added Google link
+       ============================================ -->
+  <section id="reviews" class="py-28 relative overflow-hidden">
+    <div class="absolute inset-0 bg-[var(--bg)]"></div>
+    <div class="relative z-10 max-w-5xl mx-auto px-6">
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-6 mb-20 scroll-stagger" id="stats-section">
+        {statCards.map((stat) => (
+          <div class="glass-card p-6 md:p-8 text-center stat-entrance">
+            <div class="font-heading font-extrabold text-4xl md:text-5xl text-white mb-1"
+              data-count-target={stat.target}
+              data-count-suffix={stat.suffix}
+              data-count-decimal={stat.decimal ? 'true' : ''}>
+              {stat.decimal ? `${stat.suffix}0` : `0${stat.suffix}`}
+            </div>
+            <div class="text-white/40 text-[13px] uppercase tracking-wider font-medium">{stat.label}</div>
+          </div>
+        ))}
+      </div>
+
+      <div class="text-center mb-12 scroll-reveal">
+        <p class="text-[13px] uppercase tracking-[0.15em] text-[var(--accent)] font-semibold mb-3">Real Words, Real Homeowners</p>
+        <h2 class="font-heading font-extrabold text-3xl md:text-4xl text-white">Don't take our word for it.</h2>
+      </div>
+
+      <div class="grid md:grid-cols-3 gap-6 scroll-stagger">
+        {reviews.map((review) => (
+          <div class="glass-card p-8 relative group hover:bg-white/10 transition-colors">
+            <div class="absolute top-4 right-6 text-[var(--accent)]/30 text-5xl font-serif leading-none">&ldquo;</div>
+            <p class="text-white/80 text-[17px] italic leading-relaxed mb-5">&ldquo;{review.text}&rdquo;</p>
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-full bg-[var(--accent)]/20 flex items-center justify-center text-[var(--accent)] font-bold text-[15px]">{review.name.charAt(0)}</div>
+              <div>
+                <p class="text-white text-[15px] font-semibold">{review.name}</p>
+                <p class="text-white/40 text-[13px]">{review.location} &middot; {review.service}</p>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <!-- V2 NEW: Google Reviews Link -->
+      <div class="text-center mt-10 scroll-reveal">
+        <a href={contractor.google_reviews_link} target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 text-[var(--accent)] hover:text-[var(--accent)]/80 transition-colors text-[15px] font-semibold">
+          Read all {stats.projects}+ reviews on Google
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17l9.2-9.2M17 17V7H7"/></svg>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================
+       7. SERVICES — Grid with transparent pricing
+       ============================================ -->
+  <section class="py-20 pb-32 md:py-20 relative">
+    <div class="absolute inset-0 bg-[var(--surface)]"></div>
+    <div class="relative z-10 max-w-5xl mx-auto px-6">
+      <div class="text-center mb-12 scroll-reveal">
+        <p class="text-[13px] uppercase tracking-[0.15em] font-semibold mb-3" style={`color: ${accent}`}>Concrete Services in {contractor.service_areas[0]}</p>
+        <h2 class="font-heading font-bold text-2xl md:text-3xl text-white">{pc?.servicesHeading || 'Fixed Pricing. No Surprises.'}</h2>
+        {pc?.servicesSubheading && <p class="text-white/40 text-[15px] mt-2">{pc.servicesSubheading}</p>}
+      </div>
+      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 scroll-stagger">
+        {services.slice(0, 6).map((s) => (
+          <a href={`/v2/${contractor.slug}/services#${s.name.toLowerCase().replace(/\s+/g, '-')}`} class="glass-card overflow-hidden group hover:bg-white/10 transition-all">
+            <div class="aspect-[16/10] overflow-hidden">
+              <img src={s.image} alt={s.name} loading="lazy" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
+            </div>
+            <div class="p-5">
+              <h3 class="font-heading font-bold text-white text-lg">{s.name}</h3>
+              <p class="text-white/40 text-[14px] mt-1">{(s as any).priceDetail || s.price}</p>
+            </div>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================
+       8. FINAL CTA — 3 clear options
+       ============================================ -->
+  <section class="py-28 relative">
+    <div class="absolute inset-0 bg-gradient-to-b from-[var(--surface)] to-[var(--bg)]"></div>
+    <div class="relative z-10 max-w-4xl mx-auto px-6 text-center">
+      <div class="scroll-reveal">
+        <h2 class="font-heading font-extrabold text-3xl md:text-5xl text-white mb-4">{pc?.ctaHeadline || 'Get your free estimate. Zero obligation.'}</h2>
+        <p class="text-white/40 text-lg mb-3">{pc?.ctaSubtext || 'Whether you chat, call, or have us call you — straight answers within minutes.'}</p>
+        <p class="text-white/30 text-sm mb-12">{pc?.ctaTrust || `Free estimate · No obligation · ${contractor.warranty_text} · Licensed & insured`}</p>
+      </div>
+
+      <div class="flex flex-col sm:flex-row gap-5 justify-center scroll-stagger">
+        <a href="#quoter" class="bg-[var(--accent)] text-white px-10 py-5 rounded-2xl font-bold text-lg shadow-lg shadow-[var(--accent)]/20 hover:shadow-xl hover:shadow-[var(--accent)]/30 hover:scale-[1.03] transition-all text-center">
+          Get Your Estimate Online
+        </a>
+        <a href={`tel:${callNumber}`} class="border border-white/20 text-white px-10 py-5 rounded-2xl font-semibold text-lg backdrop-blur-sm hover:bg-white/10 transition-all text-center">
+          {hasVoiceAI ? 'Call — AI Picks Up Instantly' : `Call ${contractor.phone}`}
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <Footer
+    slug={contractor.slug}
+    businessName={contractor.business_name}
+    phone={contractor.phone}
+    phoneRaw={contractor.phoneRaw}
+    voicePhoneRaw={callNumber}
+    licenseNumber={contractor.license_number}
+    serviceAreas={contractor.service_areas}
+    businessHours={contractor.business_hours}
+  />
+
+  <MobileCTA phoneRaw={callNumber} contactHref="#quoter" />
+
+  <!-- V2: Dynamic theme — colors, effects, animations per contractor -->
+  <style is:global define:vars={{
+    accent: t.accent,
+    accentLight: t.accentLight,
+    primary: t.primary,
+    surface: t.surface,
+    bg: t.bg,
+  }}>
+    .process-scroll { height: 200vh !important; }
+    .gradient-text { background: linear-gradient(135deg, var(--accent), #fff) !important; -webkit-background-clip: text !important; -webkit-text-fill-color: transparent !important; }
+    .pulse-cta { animation: pulse-accent 2s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
+    @keyframes pulse-accent { 0%, 100% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--accent) 40%, transparent); } 50% { box-shadow: 0 0 20px 4px color-mix(in srgb, var(--accent) 20%, transparent); } }
+
+    /* Glass card uses theme surface */
+    .glass-card { background: var(--surface) !important; border-color: color-mix(in srgb, var(--accent) 10%, transparent) !important; }
+
+    /* ====== MESH GRADIENT BACKGROUND ====== */
+    .mesh-gradient {
+      position: fixed; inset: 0; z-index: 0; pointer-events: none;
+      background:
+        radial-gradient(ellipse 80% 50% at 20% 40%, color-mix(in srgb, var(--accent) 8%, transparent), transparent),
+        radial-gradient(ellipse 60% 80% at 80% 20%, color-mix(in srgb, var(--primary) 6%, transparent), transparent),
+        radial-gradient(ellipse 70% 60% at 60% 80%, color-mix(in srgb, var(--accent) 5%, transparent), transparent);
+      background-size: 200% 200%;
+      animation: mesh-drift 25s ease-in-out infinite;
+    }
+    @keyframes mesh-drift {
+      0%, 100% { background-position: 0% 0%; }
+      25% { background-position: 100% 50%; }
+      50% { background-position: 50% 100%; }
+      75% { background-position: 0% 50%; }
+    }
+
+    /* ====== CURSOR SPOTLIGHT ====== */
+    .cursor-spotlight {
+      position: fixed; inset: 0; z-index: 1; pointer-events: none;
+      background: radial-gradient(600px circle at var(--cx, -999px) var(--cy, -999px), color-mix(in srgb, var(--accent) 5%, transparent), transparent 70%);
+      transition: background 0.15s ease;
+    }
+
+    /* ====== HERO CINEMA ENTRANCE ====== */
+    .hero-cinema-bg {
+      animation: hero-zoom-out 1.2s cubic-bezier(0.16, 1, 0.3, 1) both;
+    }
+    @keyframes hero-zoom-out {
+      from { transform: scale(1.15); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+    .hero-cinema-text {
+      animation: hero-blur-in 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
+    }
+    .hero-cinema-text-1 { animation-delay: 0.2s; }
+    .hero-cinema-text-2 { animation-delay: 0.4s; }
+    .hero-cinema-text-3 { animation-delay: 0.6s; }
+    .hero-cinema-text-4 { animation-delay: 0.8s; }
+    @keyframes hero-blur-in {
+      from { filter: blur(8px); opacity: 0; transform: translateY(20px); }
+      to { filter: blur(0); opacity: 1; transform: translateY(0); }
+    }
+
+    /* ====== 3D CARD TILT + GLARE ====== */
+    .tilt-card { transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1); transform-style: preserve-3d; }
+    .tilt-card::before {
+      content: ''; position: absolute; inset: 0; border-radius: inherit;
+      background: radial-gradient(circle at var(--gx, 50%) var(--gy, 50%), rgba(255,255,255,0.08), transparent 60%);
+      opacity: 0; transition: opacity 0.4s; pointer-events: none; z-index: 10;
+    }
+    .tilt-card:hover::before { opacity: 1; }
+
+    /* ====== REDUCED MOTION ====== */
+    @media (prefers-reduced-motion: reduce) {
+      .mesh-gradient { animation: none; }
+      .hero-cinema-bg { animation: none; opacity: 1; transform: none; }
+      .hero-cinema-text { animation: none; opacity: 1; filter: none; transform: none; }
+      .tilt-card { transition: none; }
+      .tilt-card::before { display: none; }
+    }
+  </style>
+
+  <!-- Mesh gradient background (fixed, behind everything) -->
+  <div class="mesh-gradient" aria-hidden="true"></div>
+
+  <!-- Cursor spotlight (desktop only) -->
+  <div class="cursor-spotlight" id="cursor-spotlight" aria-hidden="true"></div>
+
+  <!-- SCROLL ENGINE -->
+  <script>
+    const progressBar = document.getElementById('scroll-progress');
+    const baContainer = document.querySelector('.ba-container') as HTMLElement;
+    const baAfter = document.getElementById('ba-after') as HTMLElement;
+    const baDivider = document.getElementById('ba-divider') as HTMLElement;
+    const baLabelAfter = document.getElementById('ba-label-after') as HTMLElement;
+    const processSection = document.getElementById('process-section') as HTMLElement;
+    const processCards = document.querySelectorAll('.process-step-card');
+    const stepDots = document.querySelectorAll('.step-dot');
+
+    function onScroll() {
+      const scrollY = window.scrollY;
+      const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+      if (progressBar) progressBar.style.setProperty('--scroll-progress', String(scrollY / maxScroll));
+
+      if (baContainer && baAfter && baDivider) {
+        const rect = baContainer.getBoundingClientRect();
+        const progress = Math.max(0, Math.min(1, -rect.top / (baContainer.offsetHeight - window.innerHeight)));
+        baAfter.style.setProperty('--ba-clip', `${(1 - progress) * 100}%`);
+        baDivider.style.left = `${progress * 100}%`;
+        if (baLabelAfter) baLabelAfter.style.opacity = progress > 0.3 ? '1' : '0';
+      }
+
+      if (processSection) {
+        const rect = processSection.getBoundingClientRect();
+        const progress = Math.max(0, Math.min(1, -rect.top / (processSection.offsetHeight - window.innerHeight)));
+        const stepIndex = Math.min(2, Math.floor(progress * 3));
+        processCards.forEach((card, i) => card.classList.toggle('active', i === stepIndex));
+        stepDots.forEach((dot, i) => {
+          (dot as HTMLElement).style.background = i === stepIndex ? getComputedStyle(document.documentElement).getPropertyValue('--accent').trim() || '#E87C3E' : 'rgba(255,255,255,0.2)';
+          (dot as HTMLElement).style.width = i === stepIndex ? '2rem' : '0.75rem';
+        });
+      }
+    }
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+
+    // Reveal animations
+    const revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => { if (entry.isIntersecting) entry.target.classList.add('visible'); });
+    }, { threshold: 0.15 });
+    document.querySelectorAll('.scroll-reveal, .scroll-stagger, .stat-entrance').forEach(el => revealObserver.observe(el));
+
+    // Counter animation
+    const statsSection = document.getElementById('stats-section');
+    if (statsSection) {
+      let done = false;
+      const obs = new IntersectionObserver((entries) => {
+        if (entries[0].isIntersecting && !done) {
+          done = true;
+          statsSection.querySelectorAll('[data-count-target]').forEach(el => {
+            const target = parseFloat(el.getAttribute('data-count-target')!);
+            const suffix = el.getAttribute('data-count-suffix') || '';
+            const isDecimal = el.getAttribute('data-count-decimal') === 'true';
+            const end = isDecimal ? target * 10 : target;
+            const start = performance.now();
+            function tick(now: number) {
+              const p = Math.min((now - start) / 1500, 1);
+              const v = Math.round((1 - Math.pow(1 - p, 3)) * end);
+              el.textContent = isDecimal ? `${suffix}${(v / 10).toFixed(1)}` : `${v}${suffix}`;
+              if (p < 1) requestAnimationFrame(tick);
+            }
+            requestAnimationFrame(tick);
+          });
+        }
+      }, { threshold: 0.3 });
+      obs.observe(statsSection);
+    }
+
+    // Forms removed in v2 — conversion is via AI chat + call only
+
+    // ====== CURSOR SPOTLIGHT (desktop only) ======
+    if (window.matchMedia('(hover: hover)').matches) {
+      const spot = document.getElementById('cursor-spotlight');
+      if (spot) {
+        document.addEventListener('mousemove', (e) => {
+          requestAnimationFrame(() => {
+            spot.style.setProperty('--cx', e.clientX + 'px');
+            spot.style.setProperty('--cy', e.clientY + 'px');
+          });
+        }, { passive: true });
+      }
+    }
+
+    // ====== 3D CARD TILT + GLARE (desktop only) ======
+    if (window.matchMedia('(hover: hover)').matches) {
+      document.addEventListener('mousemove', (e) => {
+        const cards = document.querySelectorAll('.glass-card');
+        cards.forEach((card) => {
+          const rect = (card as HTMLElement).getBoundingClientRect();
+          const isHovered = e.clientX >= rect.left && e.clientX <= rect.right && e.clientY >= rect.top && e.clientY <= rect.bottom;
+          if (isHovered) {
+            const x = (e.clientX - rect.left) / rect.width;
+            const y = (e.clientY - rect.top) / rect.height;
+            const rotateX = (y - 0.5) * -8;
+            const rotateY = (x - 0.5) * 8;
+            (card as HTMLElement).style.transform = `perspective(800px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+            (card as HTMLElement).style.setProperty('--gx', `${x * 100}%`);
+            (card as HTMLElement).style.setProperty('--gy', `${y * 100}%`);
+            if (!card.classList.contains('tilt-card')) card.classList.add('tilt-card');
+          } else {
+            (card as HTMLElement).style.transform = '';
+          }
+        });
+      }, { passive: true });
+    }
+  </script>
+</BaseLayout>
