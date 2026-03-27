@@ -4,6 +4,7 @@ import Nav from '../../../components/Nav-v3.astro';
 import Footer from '../../../components/Footer-v3.astro';
 import MobileCTA from '../../../components/MobileCTA.astro';
 import InlineChat from '../../../components/InlineChat-v3';
+import ScrollRevealText from '../../../components/ScrollRevealText';
 import { getContractor } from '../../../data/contractors';
 
 const { slug } = Astro.params;
@@ -133,7 +134,7 @@ const description = `Professional concrete services in ${contractor.service_area
             <div class="glass-card p-8 group hover:bg-white/10 transition-colors">
               <p class="text-white/30 text-[13px] uppercase tracking-wider mb-3">{fd.fear}</p>
               <h3 class="font-heading font-bold text-xl text-white mb-2">{fd.answer}</h3>
-              <p class="text-white/50 text-[15px] leading-relaxed">{fd.detail}</p>
+              <ScrollRevealText client:visible text={fd.detail} className="text-[15px] leading-relaxed" />
             </div>
           ))
         ) : (
@@ -267,12 +268,12 @@ const description = `Professional concrete services in ${contractor.service_area
           <h2 class="font-heading font-extrabold text-2xl md:text-3xl text-white mb-4">
             {pc?.meetHeadline || `${contractor.owner_name}. ${stats.years} years. Same phone number.`}
           </h2>
-          <p class="text-white/60 text-[17px] leading-relaxed mb-4">
-            {pc?.meetText1 || `${contractor.owner_name} started ${contractor.business_name} ${stats.years} years ago with one truck and a simple promise: treat every driveway like it was his own. Today, the trucks have multiplied — but the promise hasn't changed.`}
-          </p>
-          <p class="text-white/60 text-[17px] leading-relaxed mb-6">
-            {pc?.meetText2 || `Every project is personally reviewed. Every crew member is trained in-house. And when you call, you're talking to people who live and work in ${contractor.service_areas[0]} — not a call center.`}
-          </p>
+          <div class="mb-4">
+            <ScrollRevealText client:visible text={pc?.meetText1 || `${contractor.owner_name} started ${contractor.business_name} ${stats.years} years ago with one truck and a simple promise: treat every driveway like it was his own. Today, the trucks have multiplied — but the promise hasn't changed.`} className="text-[17px] leading-relaxed" />
+          </div>
+          <div class="mb-6">
+            <ScrollRevealText client:visible text={pc?.meetText2 || `Every project is personally reviewed. Every crew member is trained in-house. And when you call, you're talking to people who live and work in ${contractor.service_areas[0]} — not a call center.`} className="text-[17px] leading-relaxed" />
+          </div>
           <div class="flex flex-wrap gap-3">
             <span class="text-[13px] text-white/50 bg-white/5 px-4 py-2 rounded-full">Licensed: {contractor.license_number}</span>
             <span class="text-[13px] text-white/50 bg-white/5 px-4 py-2 rounded-full">{contractor.warranty_text}</span>
